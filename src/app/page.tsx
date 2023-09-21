@@ -62,8 +62,8 @@ export default function Home() {
   // About API Call
   const callAboutAPI = async () => {
     await fetch('/api/about',{
-      method: 'GET',
-      //body: JSON.stringify(aboutInfo),
+      method: 'POST',
+      body: JSON.stringify(aboutInfo),
     })
   }
 
