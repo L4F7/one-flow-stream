@@ -1,0 +1,41 @@
+[
+    {
+        "Proyecto" : {
+            "Nombre" : "Entorno Prototipo para el Lenguaje OneFlowStream (OFS)",
+            "Integrantes" : [
+                {
+                    "Nombre" : "Kenneth Alfaro Barboza",
+                    "Identificacion" : "402240444"
+                },
+                {
+                    "Nombre" : "Luis Fuentes Fuentes",
+                    "Identificacion" : ""
+                },
+                {
+                    "Nombre" : "Luis Eduardo Restrepo Veintemilla",
+                    "Identificacion" : ""
+                },
+                {
+                    "Nombre" : "Maria Angelica Robles Azofeifa",
+                    "Identificacion" : ""
+                },
+                {
+                    "Nombre" : "Royer Zuñiga Villareal",
+                    "Identificacion" : ""
+                }
+            ]
+        }
+    },
+    {
+        "Curso" :
+            {
+            "Nombre" : "Paradigmas de Programación",
+            "Codigo" : "EIF400",
+            "Horario" : "3PM",
+            "Semestre" : "II",
+            "Año" : "2023",
+            "Escuela" : "Escuela de Informática",
+            "Universidad" : "Universidad Nacional"
+            }
+    }
+]
