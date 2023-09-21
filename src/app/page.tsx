@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
 import {API_SERVER_URL} from '../components/Url'
 
@@ -8,11 +9,12 @@ const bgColor = "bg-slate-400"
 
 export default function Home() {
 
-  const [keywordsList, setKeywordsList] = useState<string[]>([]);
-  const [aboutInfo, setAboutInfo] = useState<string[]>([]);
+  const router = useRouter()
+  const [keywordsList, setKeywordsList] = useState<string[]>([])
+  const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
-  const [aboutModal, setAboutModal] = useState<boolean>(false);
+  const [aboutModal, setAboutModal] = useState<boolean>(false)
 
   useEffect(() => {
     
@@ -65,6 +67,7 @@ export default function Home() {
       method: 'POST',
       body: JSON.stringify(aboutInfo),
     })
+    router.push('/about', {})
   }
 
   const handleAboutModal = () => setAboutModal(!aboutModal)
