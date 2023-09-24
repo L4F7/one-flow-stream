@@ -86,7 +86,7 @@ export default function Home() {
             <button className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
               Pref.
             </button>
-            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
+            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callAboutAPI}>
               About
             </button>
           </div>
@@ -109,7 +109,7 @@ export default function Home() {
           />
           </div>
           <div className="flex flex-col justify-evenly p-4">
-            <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Compile</button>
+            <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Execute</button>
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Analyze</button>
           </div>
