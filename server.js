@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(express.static('build'));
 
 // Process endpoint
-app.post('/process', (req, res) => {
+app.post('/compile', (req, res) => {
   // Process the input and echo it with a timestamp
   const timestampedText = `Echo from server: at ${new Date().toISOString()}: \n${req.body.text}`;
   console.log(timestampedText)

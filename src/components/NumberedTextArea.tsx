@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useMemo, useRef } from "react";
+import React, { ChangeEventHandler, useMemo, useRef, useState } from "react";
 import LineNumbersStyle, { css } from "styled-components";
 
 const LineNumberDiv = LineNumbersStyle.div`
@@ -65,8 +65,27 @@ const NumberedTextArea = ({value,numOfLines, textColor = "text-black", name, han
     }
   };
 
+  const [wordCount, setWordCount] = useState(0);
+//const ref = useRef<HTMLTextAreaElement | null>(null);
+
+const handleChange = () => {
+  console.log(`HandleChange Called`)
+  if (!textareaRef.current) return; 
+  
+  if (textareaRef.current.value === "") { 
+      setWordCount(0);
+      return;
+  }
+
+    const text : string = textareaRef.current.value;
+    const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
+    const newWordCount = (cleanText.match(/ /g) || []).length + 1;
+    setWordCount(newWordCount);
+  };
+
   return (
-    <LineNumberDiv>
+    <>
+      <LineNumberDiv>
       <Numbers ref={lineNumberRef}>
         {lineNumberArray.map((count) => (
           <Number active={count <= lineNumber} key={count}>
@@ -77,13 +96,20 @@ const NumberedTextArea = ({value,numOfLines, textColor = "text-black", name, han
       <StyledTextarea
       className={`h-full w-full h-40 border border-gray-300 rounded p-2 ${textColor}`}
         name={name}
-        onChange= {handleInputChange}
+        onChange= {() => {handleChange}}
+        //{handleChange}
         onScroll={handleTextareaScroll}
         ref={textareaRef}
-        value={value}
+        value={"TEST"}
         wrap="off"
       />
-    </LineNumberDiv>
+      </LineNumberDiv>
+      <textarea 
+          className={`h-6 w-full ${textColor} `}
+          readOnly={true}
+          value={`${wordCount} words`}
+      ></textarea>
+    </>
   );
 };
 

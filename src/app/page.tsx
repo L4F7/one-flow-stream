@@ -32,6 +32,7 @@ export default function Home() {
   }, []);
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(`HandleInputChange Called`)
     const newText : string = e.target.value;
     const words : string[] = newText.split(/\s+/); 
   
@@ -51,7 +52,7 @@ export default function Home() {
 
   const handleSendToServer = () => {
       // 
-      fetch(`${API_SERVER_URL}/process`, {
+      fetch(`${API_SERVER_URL}/compile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
