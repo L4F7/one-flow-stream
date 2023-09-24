@@ -48,7 +48,7 @@ const Numbers = LineNumbersStyle.div`
 const Number = LineNumbersStyle.div<{ active: boolean }>`
 `;
 
-const NumberedTextArea = ({value,numOfLines, textColor = "text-black", onValueChange,name,handleInputChange}:{value: string, numOfLines: number, textColor: string, onValueChange: (value: string) => void, name?: string,handleInputChange ?: ChangeEventHandler}) => {
+const NumberedTextArea = ({value,numOfLines, textColor = "text-black", name, handleInputChange} : {value: string, numOfLines: number, textColor: string, name?: string,handleInputChange ?: ChangeEventHandler}) => {
   const lineNumber = useMemo(() => value.split("\n").length, [value]);
   const lineNumberArray = useMemo(
     () =>
@@ -58,12 +58,6 @@ const NumberedTextArea = ({value,numOfLines, textColor = "text-black", onValueCh
 
   const lineNumberRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleTextareaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    onValueChange(event.target.value);
-  };
 
   const handleTextareaScroll = () => {
     if (lineNumberRef.current && textareaRef.current) {
@@ -83,12 +77,7 @@ const NumberedTextArea = ({value,numOfLines, textColor = "text-black", onValueCh
       <StyledTextarea
       className={`h-full w-full h-40 border border-gray-300 rounded p-2 ${textColor}`}
         name={name}
-        onChange=
-        { (event) => {
-          handleTextareaChange
-          handleInputChange
-          }     
-        }
+        onChange= {handleInputChange}
         onScroll={handleTextareaScroll}
         ref={textareaRef}
         value={value}

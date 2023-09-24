@@ -103,7 +103,6 @@ export default function Home() {
             name="EA"
             value={inputText}
             textColor = "text-black"
-            onValueChange={(inputText: string) => setValue(inputText)}
             numOfLines={20}
             handleInputChange={handleInputChange}
           />
@@ -120,7 +119,6 @@ export default function Home() {
             name="TA"
             value={outputText}
             textColor = "text-black"
-            onValueChange={(value: string) => setValue(value)}
             numOfLines={20}
             />
           </div>
