@@ -1,9 +1,82 @@
 import React from 'react'
 import TextArea from '../components/TextArea'
+<<<<<<< Updated upstream
+=======
+import NumberedTextArea from '../components/NumberedTextArea'
+import {API_SERVER_URL} from '../components/Url'
+>>>>>>> Stashed changes
 
 const bgColor = "bg-slate-400"
 
 export default function Home() {
+<<<<<<< Updated upstream
+=======
+
+  const router = useRouter()
+  const [value, setValue] = useState("");
+  const [keywordsList, setKeywordsList] = useState<string[]>([])
+  const [aboutInfo, setAboutInfo] = useState<string[]>([])
+  const [inputText, setInputText] = useState<string>('')
+  const [outputText, setOutputText] = useState<string>('')
+  const [aboutModal, setAboutModal] = useState<boolean>(false)
+
+  useEffect(() => {
+    
+    fetch(`${API_SERVER_URL}/keywords`)
+      .then((response) => response.json())
+      .then((data) => setKeywordsList(data.keywords))
+      .catch((error) => console.error('Error fetching keywords:', error));
+
+      fetch(`${API_SERVER_URL}/about`)
+      .then((response) => response.json())
+      .then((data) => setAboutInfo(JSON.parse(data.about)))
+      .catch((error) => console.error('Error fetching about Info:', error));
+  }, []);
+
+  const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
+    const newText : string = e.target.value;
+    const words : string[] = newText.split(/\s+/); 
+  
+    const individualWords: string[] = words
+                                      .map((word) => word.trim())
+                                      .filter((trimmedWord) => keywordsList.includes(trimmedWord));
+
+    //Original 
+    const processedText: string = individualWords.join(' ');
+
+    //Temporary Testing
+    //const processedText: string = words.join(' ');
+  
+    setInputText(newText);
+    setOutputText(processedText);
+  };
+
+  const handleSendToServer = () => {
+      // 
+      fetch(`${API_SERVER_URL}/process`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: inputText }),
+      })
+        .then((response) => response.json())
+        .then((data) => setOutputText(data.result))
+        .catch((error) => console.error('Error sending data to server:', error));
+    };
+
+  // About API Call
+  const callAboutAPI = async () => {
+    await fetch('/api/about',{
+      method: 'POST',
+      body: JSON.stringify(aboutInfo),
+    })
+    router.push('/about', {})
+  }
+
+  const handleAboutModal = () => setAboutModal(!aboutModal)
+
+>>>>>>> Stashed changes
   return (
     <div className="h-screen flex flex-col">
       {/* Header Section */}
@@ -29,9 +102,20 @@ export default function Home() {
 
           {/*EA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
+<<<<<<< Updated upstream
             <TextArea
                 backgroundColor = "bg-neutral-100"
             />
+=======
+          <NumberedTextArea
+            name="EA"
+            value={inputText}
+            textColor = "text-black"
+            onValueChange={(inputText: string) => setValue(inputText)}
+            numOfLines={20}
+            handleInputChange={handleInputChange}
+          />
+>>>>>>> Stashed changes
           </div>
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Compile</button>
@@ -41,9 +125,18 @@ export default function Home() {
 
           {/*TA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
+<<<<<<< Updated upstream
             <TextArea
               backgroundColor = "bg-neutral-100"
               setReadOnly = {true}
+=======
+          <NumberedTextArea
+            name="TA"
+            value={outputText}
+            textColor = "text-black"
+            onValueChange={(value: string) => setValue(value)}
+            numOfLines={20}
+>>>>>>> Stashed changes
             />
           </div>
         </div>
