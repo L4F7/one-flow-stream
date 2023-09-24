@@ -3,6 +3,7 @@
 import { useState, useEffect, ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
+import NumberedTextArea from '../components/NumberedTextArea'
 import {API_SERVER_URL} from '../components/Url'
 
 const bgColor = "bg-slate-400"
@@ -10,6 +11,7 @@ const bgColor = "bg-slate-400"
 export default function Home() {
 
   const router = useRouter()
+  const [value, setValue] = useState("");
   const [keywordsList, setKeywordsList] = useState<string[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
@@ -30,6 +32,7 @@ export default function Home() {
   }, []);
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(`HandleInputChange Called`)
     const newText : string = e.target.value;
     const words : string[] = newText.split(/\s+/); 
   
@@ -49,7 +52,7 @@ export default function Home() {
 
   const handleSendToServer = () => {
       // 
-      fetch(`${API_SERVER_URL}/process`, {
+      fetch(`${API_SERVER_URL}/compile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +77,6 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col">
-
       {/* Header Section */}
       <header className="bg-slate-700 text-white p-4">
         <div className="flex justify-between">
@@ -98,12 +100,13 @@ export default function Home() {
 
           {/*EA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
-            <TextArea
-                keywordsList = {keywordsList}
-                backgroundColor = "bg-neutral-100"
-                valueReceived = {inputText}
-                handleInputChange = {handleInputChange}
-            />
+          <NumberedTextArea
+            name="EA"
+            value={inputText}
+            textColor = "text-black"
+            numOfLines={20}
+            handleInputChange={handleInputChange}
+          />
           </div>
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
@@ -113,10 +116,11 @@ export default function Home() {
 
           {/*TA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
-            <TextArea
-              backgroundColor = "bg-neutral-100"
-              setReadOnly = {true}
-              valueReceived = {outputText}
+          <NumberedTextArea
+            name="TA"
+            value={outputText}
+            textColor = "text-black"
+            numOfLines={20}
             />
           </div>
         </div>
