@@ -1,16 +1,14 @@
-import React from 'react'
+'use client'
+
+import { useState, useEffect, ChangeEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
-<<<<<<< Updated upstream
-=======
 import NumberedTextArea from '../components/NumberedTextArea'
 import {API_SERVER_URL} from '../components/Url'
->>>>>>> Stashed changes
 
 const bgColor = "bg-slate-400"
 
 export default function Home() {
-<<<<<<< Updated upstream
-=======
 
   const router = useRouter()
   const [value, setValue] = useState("");
@@ -76,7 +74,6 @@ export default function Home() {
 
   const handleAboutModal = () => setAboutModal(!aboutModal)
 
->>>>>>> Stashed changes
   return (
     <div className="h-screen flex flex-col">
       {/* Header Section */}
@@ -102,11 +99,6 @@ export default function Home() {
 
           {/*EA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
-<<<<<<< Updated upstream
-            <TextArea
-                backgroundColor = "bg-neutral-100"
-            />
-=======
           <NumberedTextArea
             name="EA"
             value={inputText}
@@ -115,7 +107,6 @@ export default function Home() {
             numOfLines={20}
             handleInputChange={handleInputChange}
           />
->>>>>>> Stashed changes
           </div>
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Compile</button>
@@ -125,18 +116,12 @@ export default function Home() {
 
           {/*TA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
-<<<<<<< Updated upstream
-            <TextArea
-              backgroundColor = "bg-neutral-100"
-              setReadOnly = {true}
-=======
           <NumberedTextArea
             name="TA"
             value={outputText}
             textColor = "text-black"
             onValueChange={(value: string) => setValue(value)}
             numOfLines={20}
->>>>>>> Stashed changes
             />
           </div>
         </div>
