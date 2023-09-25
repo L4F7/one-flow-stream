@@ -2,22 +2,21 @@
 
 import { useState, useEffect, ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import TextArea from '../components/TextArea'
-import NumberedTextArea from '../components/NumberedTextArea'
 import {API_SERVER_URL} from '../components/Url'
+import TextArea from '../components/TextArea'
+import CodeEditor from '../components/CodeEditor'
 
 const bgColor = "bg-slate-400"
 
 export default function Home() {
 
   const router = useRouter()
-  const [value, setValue] = useState("");
   const [keywordsList, setKeywordsList] = useState<string[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
-  const [aboutModal, setAboutModal] = useState<boolean>(false)
-  const [wordCount, setWordCount] = useState(0);
+  const [wordCount, setWordCount] = useState<number>(0);
+  const [content, setContent] = useState<string>('');
 
   useEffect(() => {
     
@@ -33,17 +32,27 @@ export default function Home() {
   }, []);
 
 
-  const handleWordCountChange = ( textInput : string) => {
-    console.log(`HandleChange Called`)
-    
-    if (textInput === "") { 
-        setWordCount(0);
+  const countWords = (validationText : string) => {
+
+    if (validationText === "") { 
+      setWordCount(0);
+      return;
     }
 
-    const text : string = textInput;
+    const text : string = validationText;
     const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
     const newWordCount = (cleanText.match(/ /g) || []).length + 1;
     setWordCount(newWordCount);
+  };
+
+
+  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText: string = event.target.value;
+
+    // Call multiple handleChange functions
+    handleInputChange(event);
+    setContent(event.target.value);
+    countWords(event.target.value);
   };
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,17 +68,6 @@ export default function Home() {
   
     setInputText(newText);
     setOutputText(processedText);
-  };
-
-  const allHandleChanges = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(`allHandleChanges Called`);
-    const newText: string = e.target.value;
-
-    // Call handleChange
-    handleWordCountChange(newText);
-
-    // Call handleInputChange
-    handleInputChange(e);
   };
 
   const handleSendToServer = () => {
@@ -95,8 +93,6 @@ export default function Home() {
     router.push('/about', {})
   }
 
-  const handleAboutModal = () => setAboutModal(!aboutModal)
-
   return (
     <div className="h-screen flex flex-col">
       {/* Header Section */}
@@ -121,17 +117,13 @@ export default function Home() {
         <div className="h-1/2 flex justify-between w-full">
 
           {/*EA*/}
-          <div className={`w-1/2 p-4 ${bgColor}`}>
-          <NumberedTextArea
-            name = "EA"
-            value = {inputText}
-            backgroundColor = "bg-blue-100"
-            textColor = "text-black"
-            numOfLines = {20}
-            allHandleChange = {allHandleChanges}
-            wordCount = {wordCount}
+          <CodeEditor 
+            content={inputText}
+            wordCount = {wordCount} 
+            handleTextareaChange={handleTextareaChange}
+            width = "w-1/2"
+            backgroundColor = "bg-neutral-100"
           />
-          </div>
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Execute</button>
@@ -139,16 +131,13 @@ export default function Home() {
           </div>
 
           {/*TA*/}
-          <div className = {`w-1/2 p-4 ${bgColor}`}>
-          <NumberedTextArea
-            name = "TA"
-            value = {outputText}
-            backgroundColor = "bg-white"
-            textColor = "text-black"
-            numOfLines = {20}
-            wordCount = {wordCount}
-            />
-          </div>
+          <CodeEditor 
+            content={outputText}
+            wordCount = {wordCount} 
+            handleTextareaChange={handleTextareaChange} 
+            width = "w-1/2"
+            backgroundColor = "bg-neutral-100"
+          />
         </div>
 
         {/*RA*/}
