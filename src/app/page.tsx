@@ -17,6 +17,7 @@ export default function Home() {
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
   const [aboutModal, setAboutModal] = useState<boolean>(false)
+  const [wordCount, setWordCount] = useState(0);
 
   useEffect(() => {
     
@@ -31,6 +32,20 @@ export default function Home() {
       .catch((error) => console.error('Error fetching about Info:', error));
   }, []);
 
+
+  const handleWordCountChange = ( textInput : string) => {
+    console.log(`HandleChange Called`)
+    
+    if (textInput === "") { 
+        setWordCount(0);
+    }
+
+    const text : string = textInput;
+    const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
+    const newWordCount = (cleanText.match(/ /g) || []).length + 1;
+    setWordCount(newWordCount);
+  };
+
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
     console.log(`HandleInputChange Called`)
     const newText : string = e.target.value;
@@ -40,14 +55,21 @@ export default function Home() {
                                       .map((word) => word.trim())
                                       .filter((trimmedWord) => keywordsList.includes(trimmedWord));
 
-    //Original 
     const processedText: string = individualWords.join(' ');
-
-    //Temporary Testing
-    //const processedText: string = words.join(' ');
   
     setInputText(newText);
     setOutputText(processedText);
+  };
+
+  const allHandleChanges = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(`allHandleChanges Called`);
+    const newText: string = e.target.value;
+
+    // Call handleChange
+    handleWordCountChange(newText);
+
+    // Call handleInputChange
+    handleInputChange(e);
   };
 
   const handleSendToServer = () => {
@@ -101,11 +123,13 @@ export default function Home() {
           {/*EA*/}
           <div className={`w-1/2 p-4 ${bgColor}`}>
           <NumberedTextArea
-            name="EA"
-            value={inputText}
+            name = "EA"
+            value = {inputText}
+            backgroundColor = "bg-blue-100"
             textColor = "text-black"
-            numOfLines={20}
-            handleInputChange={handleInputChange}
+            numOfLines = {20}
+            allHandleChange = {allHandleChanges}
+            wordCount = {wordCount}
           />
           </div>
           <div className="flex flex-col justify-evenly p-4">
@@ -115,12 +139,14 @@ export default function Home() {
           </div>
 
           {/*TA*/}
-          <div className={`w-1/2 p-4 ${bgColor}`}>
+          <div className = {`w-1/2 p-4 ${bgColor}`}>
           <NumberedTextArea
-            name="TA"
-            value={outputText}
+            name = "TA"
+            value = {outputText}
+            backgroundColor = "bg-white"
             textColor = "text-black"
-            numOfLines={20}
+            numOfLines = {20}
+            wordCount = {wordCount}
             />
           </div>
         </div>

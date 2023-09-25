@@ -4,7 +4,7 @@ import LineNumbersStyle, { css } from "styled-components";
 const LineNumberDiv = LineNumbersStyle.div`
   border-radius: 2px;
   width: 100%;
-  height: 220px;
+  height: 400px;
 `;
 
 const sharedStyle = css`
@@ -48,7 +48,7 @@ const Numbers = LineNumbersStyle.div`
 const Number = LineNumbersStyle.div<{ active: boolean }>`
 `;
 
-const NumberedTextArea = ({value,numOfLines, textColor = "text-black", name, handleInputChange} : {value: string, numOfLines: number, textColor: string, name?: string,handleInputChange ?: ChangeEventHandler}) => {
+const NumberedTextArea = ({value,numOfLines, backgroundColor, textColor = "text-black", name, allHandleChange, wordCount} : {value: string, numOfLines: number, backgroundColor: String, textColor: string, name?: string, allHandleChange ?: ChangeEventHandler, wordCount : number}) => {
   const lineNumber = useMemo(() => value.split("\n").length, [value]);
   const lineNumberArray = useMemo(
     () =>
@@ -65,25 +65,6 @@ const NumberedTextArea = ({value,numOfLines, textColor = "text-black", name, han
     }
   };
 
-  const [wordCount, setWordCount] = useState(0);
-//const ref = useRef<HTMLTextAreaElement | null>(null);
-
-/*const handleChange = () => {
-  console.log(`HandleChange Called`)
-  if (!textareaRef.current) return; 
-  
-  if (textareaRef.current.value === "") { 
-      setWordCount(0);
-      return;
-  }
-
-    const text : string = textareaRef.current.value;
-    const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
-    const newWordCount = (cleanText.match(/ /g) || []).length + 1;
-    setWordCount(newWordCount);
-  };*/
-
-
   return (
     <>
       <LineNumberDiv>
@@ -95,21 +76,22 @@ const NumberedTextArea = ({value,numOfLines, textColor = "text-black", name, han
         ))}
       </Numbers>
       <StyledTextarea
-      className={`h-full w-full h-40 border border-gray-300 rounded p-2 ${textColor}`}
-        name={name}
-        onChange= {handleInputChange}
-        //{handleChange}
-        onScroll={handleTextareaScroll}
-        ref={textareaRef}
-        value={value}
-        wrap="off"
+      className = {`h-full w-full h-40 border border-gray-300 rounded p-2 ${textColor}`}
+        name = {name}
+        onChange = {allHandleChange}
+        onScroll = {handleTextareaScroll}
+        ref = {textareaRef}
+        value = {value}
       />
       </LineNumberDiv>
-      <textarea 
-          className={`h-6 w-full ${textColor} `}
-          readOnly={true}
-          value={`${wordCount} words`}
-      ></textarea>
+      { name == "EA" &&
+        <StyledTextarea 
+            className = {`h-full w-full h-20 border border-gray-300 rounded p-2 ${textColor} ${backgroundColor}`}
+            //className={`h-6 w-full ${textColor} `}
+            readOnly = {true}
+            value = {`${wordCount} words`}
+        />
+      }
     </>
   );
 };
