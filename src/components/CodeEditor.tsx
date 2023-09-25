@@ -1,13 +1,13 @@
 'use client'
 // components/CodeEditor.tsx
 
-import React, { useState, useEffect, useRef, ChangeEventHandler } from 'react';
+import React, { useState, useEffect, useRef, ChangeEventHandler, ChangeEvent } from 'react';
 import {bgColor} from '../app/shared'
 
 interface CodeEditorProps {
   content : string;
-  wordCount :  number;
-  handleTextareaChange : ChangeEventHandler;
+  //wordCount :  number;
+  handleInputChange : ChangeEventHandler;
   height? : String; 
   width? : String; 
   backgroundColor : string; 
@@ -15,9 +15,39 @@ interface CodeEditorProps {
   setReadOnly? : boolean
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ content, wordCount, handleTextareaChange, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ content, /*wordCount,*/ handleInputChange,  height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const lineNumbersRef = useRef<HTMLDivElement | null>(null);
+  const [wordCount, setWordCount] = useState<number>(0);
+
+  const countWords = (validationText : string) => {
+    console.log(`Counting words for: ${validationText}`)
+
+    if (validationText === "") { 
+      setWordCount(0);
+      return;
+    }
+
+    const text : string = validationText;
+    const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
+    const newWordCount = (cleanText.match(/ /g) || []).length + 1;
+    setWordCount(newWordCount);
+  };
+
+  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(`EA Validation: ${setReadOnly}`)
+
+    // Call multiple handleChange functions
+    if(setReadOnly){
+      countWords(content)
+    } else{
+      handleInputChange(event)
+      countWords(content)
+    }
+    
+    //setContent(event.target.value);
+    
+  };
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -63,8 +93,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ content, wordCount, handleTexta
       </div>
       <textarea 
             className={`h-6 w-full ${textColor} ${backgroundColor}`}
-            readOnly={true}
+            readOnly={setReadOnly}
             value={`${wordCount} words`}
+            onChange={() => null}
         ></textarea>
     </div>
   );

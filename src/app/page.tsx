@@ -15,7 +15,6 @@ export default function Home() {
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
-  const [wordCount, setWordCount] = useState<number>(0);
   const [content, setContent] = useState<string>('');
 
   useEffect(() => {
@@ -32,32 +31,18 @@ export default function Home() {
   }, []);
 
 
-  const countWords = (validationText : string) => {
-
-    if (validationText === "") { 
-      setWordCount(0);
-      return;
-    }
-
-    const text : string = validationText;
-    const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
-    const newWordCount = (cleanText.match(/ /g) || []).length + 1;
-    setWordCount(newWordCount);
-  };
-
-
-  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  /*const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const newText: string = event.target.value;
 
     // Call multiple handleChange functions
     handleInputChange(event);
-    setContent(event.target.value);
-    countWords(event.target.value);
-  };
+    //setContent(event.target.value);
+    //countWords(event.target.value);
+  };*/
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(`HandleInputChange Called`)
     const newText : string = e.target.value;
+    console.log(`New text received: ${newText}`)
     const words : string[] = newText.split(/\s+/); 
   
     const individualWords: string[] = words
@@ -68,6 +53,8 @@ export default function Home() {
   
     setInputText(newText);
     setOutputText(processedText);
+    console.log(`INPUT: ${newText}`)
+    console.log(`OUTPUT: ${newText}`)
   };
 
   const handleSendToServer = () => {
@@ -119,8 +106,8 @@ export default function Home() {
           {/*EA*/}
           <CodeEditor 
             content={inputText}
-            wordCount = {wordCount} 
-            handleTextareaChange={handleTextareaChange}
+            //wordCount = {wordCount} 
+            handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
           />
@@ -133,10 +120,11 @@ export default function Home() {
           {/*TA*/}
           <CodeEditor 
             content={outputText}
-            wordCount = {wordCount} 
-            handleTextareaChange={handleTextareaChange} 
+           // wordCount = {wordCount} 
+           handleInputChange={handleInputChange} 
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
+            setReadOnly = {true}
           />
         </div>
 
