@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent } from 'react'
-import { useRouter } from 'next/navigation'
-import {API_SERVER_URL} from '../components/Url'
+//import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
 import CodeEditor from '../components/CodeEditor'
 
@@ -10,7 +9,7 @@ const bgColor = "bg-slate-400"
 
 export default function Home() {
 
-  const router = useRouter()
+  //const router = useRouter()
   const [keywordsList, setKeywordsList] = useState<string[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
@@ -18,11 +17,11 @@ export default function Home() {
   const [filenames, setFilenames] = useState([]);
   const [selectedFilename, setSelectedFilename] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [content, setContent] = useState<string>('');
+  //const [content, setContent] = useState<string>('');
 
   useEffect(() => {
 
-    fetch(`${API_SERVER_URL}/keywords`)
+    fetch(`api/keywords`)
       .then((response) => response.json())
       .then((data) => setKeywordsList(data.keywords))
       .catch((error) => console.error('Error fetching keywords:', error));
@@ -36,16 +35,6 @@ export default function Home() {
       .then((data) => setAboutInfo(JSON.parse(data.about)))
       .catch((error) => console.error('Error fetching about Info:', error));
   }, []);
-
-
-  /*const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const newText: string = event.target.value;
-
-    // Call multiple handleChange functions
-    handleInputChange(event);
-    //setContent(event.target.value);
-    //countWords(event.target.value);
-  };*/
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
     const newText : string = e.target.value;
@@ -65,7 +54,6 @@ export default function Home() {
   };
 
   const handleSendToServer = () => {
-      //
       fetch(`api/compile`, {
         method: 'POST',
         headers: {
