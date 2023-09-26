@@ -219,11 +219,12 @@ export default function Home() {
           {/*TA*/}
           <CodeEditor
             content={outputText}
-           // wordCount = {wordCount}
-           handleInputChange={handleInputChange}
+            // wordCount = {wordCount}
+            handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
+            fileName='Output.js'
           />
         </div>
 

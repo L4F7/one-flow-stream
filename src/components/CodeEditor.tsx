@@ -1,102 +1,105 @@
-'use client'
+"use client";
 // components/CodeEditor.tsx
 
-import React, { useState, useEffect, useRef, ChangeEventHandler, ChangeEvent } from 'react';
-import {bgColor} from '../app/shared'
+import React, { useState, useEffect, useRef, ChangeEventHandler } from "react";
+import { bgColor } from "../app/shared";
 
 interface CodeEditorProps {
-  content : string;
-  //wordCount :  number;
-  handleInputChange : ChangeEventHandler;
-  height? : String; 
-  width? : String; 
-  backgroundColor : string; 
-  textColor? : string; 
-  setReadOnly? : boolean
+  content: string;
+  handleInputChange: ChangeEventHandler;
+  height?: String;
+  width?: String;
+  backgroundColor: string;
+  textColor?: string;
+  setReadOnly?: boolean;
+  fileName?: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ content, /*wordCount,*/ handleInputChange,  height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({content, handleInputChange, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName = "" }) => {
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const lineNumbersRef = useRef<HTMLDivElement | null>(null);
+  const numbersAreaRef = useRef<HTMLDivElement | null>(null);
   const [wordCount, setWordCount] = useState<number>(0);
+  const showFileName = fileName === "" ? "" : ` - File name: ${fileName}`;
 
-  const countWords = (validationText : string) => {
-    console.log(`Counting words for: ${validationText}`)
+  const countWords = (validationText: string) => {
 
-    if (validationText === "") { 
+    // If the text is empty, set the word count to 0
+    if (validationText === "") {
       setWordCount(0);
       return;
     }
 
-    const text : string = validationText;
-    const cleanText : string = text.replace(/[^a-zA-Z0-9\s]|\n| +/g, ' ').trim(); // remove all non-alphanumeric characters, newlines, and extra spaces
+    // remove all non-alphanumeric characters, newlines, and extra spaces
+    const cleanText: string = validationText
+      .replace(/[^a-zA-Z0-9\s]|\n| +/g, " ")
+      .trim();
+
+    // Count the number of spaces in the text and add 1 to get the word count
     const newWordCount = (cleanText.match(/ /g) || []).length + 1;
+
     setWordCount(newWordCount);
   };
 
-  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(`EA Validation: ${setReadOnly}`)
+  // Update the word count when the content changes
+  useEffect(() => {
+    countWords(content);
+  }, [content]);
 
-    // Call multiple handleChange functions
-    if(setReadOnly){
-      countWords(content)
-    } else{
-      handleInputChange(event)
-      countWords(content)
-    }
-    
-    //setContent(event.target.value);
-    
-  };
-
+  // Synchronize scrolling of textarea and line numbers
   useEffect(() => {
     const textarea = textareaRef.current;
-    const lineNumbers = lineNumbersRef.current;
-  
-    // Synchronize scrolling of textarea and line numbers
+    const numbersArea = numbersAreaRef.current;
+
     const handleScroll = () => {
-      if (textarea && lineNumbers) {
-        lineNumbers.scrollTop = textarea.scrollTop;
+      if (textarea && numbersArea) {
+        numbersArea.scrollTop = textarea.scrollTop;
       }
     };
-  
+
     if (textarea) {
-      textarea.addEventListener('scroll', handleScroll);
+      textarea.addEventListener("scroll", handleScroll);
     }
-  
+
+    /*
     return () => {
       if (textarea) {
-        textarea.removeEventListener('scroll', handleScroll);
+        textarea.removeEventListener("scroll", handleScroll);
       }
     };
+    */
+
   }, []);
 
 
   return (
     <div className={`${height} ${width} p-4 ${bgColor}`}>
-      <div className="flex" style={{ height: '95%', maxHeight: '800px' }}>
-        <div className="w-10 bg-gray-200 text-gray-600 text-center overflow-y-scroll" ref={lineNumbersRef} style={{ paddingTop: '8px' }}>
-          {/* Line numbers */}
-          {content.split('\n').map((_, index) => (
-            <div key={index}>
-              {index + 1}
-            </div>
+      <div className="flex" style={{ height: "95%", maxHeight: "800px" }}>
+        <div
+          className="bg-gray-200 text-gray-600 text-center overflow-y-scroll"
+          ref={numbersAreaRef}
+          style={{ paddingTop: "10px", paddingBottom: "22px", minWidth: "40px", width: "auto" }}
+        >
+          {/* Splits the context at each new line and add a div with the according number */}
+          {content.split("\n").map((_, index) => (
+            <div key={index}>{index + 1}</div>
           ))}
         </div>
         <textarea
           ref={textareaRef}
-          className="h-auto max-h-full flex-1 p-2 border border-gray-200 text-black resize-none overflow-y-scroll cursor-auto"
+          className="h-auto max-h-full flex-1 p-2 border border-gray-200 text-black resize-none overflow-y-scroll cursor-auto"         
+          style={{ whiteSpace: 'nowrap' }}
           value={content}
-          onChange={handleTextareaChange}
+          onChange={handleInputChange}
           readOnly={setReadOnly}
         />
       </div>
-      <textarea 
-            className={`h-6 w-full ${textColor} ${backgroundColor}`}
-            readOnly={setReadOnly}
-            value={`${wordCount} words`}
-            onChange={() => null}
-        ></textarea>
+      <textarea
+        className={`h-6 w-full ${textColor} ${backgroundColor}`}
+        readOnly={setReadOnly}
+        value={`${wordCount} words ${showFileName} `}
+        onChange={() => null}
+      ></textarea>
     </div>
   );
 };
