@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server'
 import { readFile } from 'fs/promises';
-const fs = require('fs');
 const path = require('path');
 
 export async function GET(request : Request){
