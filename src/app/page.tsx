@@ -24,8 +24,12 @@ export default function Home() {
       .then((data) => setKeywordsList(data.keywords))
       .catch((error) => console.error('Error fetching keywords:', error));
 
-      fetch(`${API_SERVER_URL}/about`)
-      .then((response) => response.json())
+      fetch(`api/about`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json()})
       .then((data) => setAboutInfo(JSON.parse(data.about)))
       .catch((error) => console.error('Error fetching about Info:', error));
   }, []);
@@ -71,15 +75,6 @@ export default function Home() {
         .catch((error) => console.error('Error sending data to server:', error));
     };
 
-  // About API Call
-  const callAboutAPI = async () => {
-    await fetch('/api/about',{
-      method: 'POST',
-      body: JSON.stringify(aboutInfo),
-    })
-    router.push('/about', {})
-  }
-
   // Scripts Calls
   const callOpenScriptAPI = async () => {
     try {
@@ -118,7 +113,7 @@ export default function Home() {
             <button className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
               Pref.
             </button>
-            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callAboutAPI}>
+            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={()=> null}>
               About
             </button>
           </div>
