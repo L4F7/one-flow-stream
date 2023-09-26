@@ -149,10 +149,11 @@ export default function Home() {
           <CodeEditor 
             content={outputText}
            // wordCount = {wordCount} 
-           handleInputChange={handleInputChange} 
+            handleInputChange={handleInputChange} 
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
+            fileName='Output.js'
           />
         </div>
 
