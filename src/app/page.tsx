@@ -4,19 +4,21 @@ import { useState, useEffect, ChangeEvent } from 'react'
 //import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
 import CodeEditor from '../components/CodeEditor'
+import AboutPopUp from '../components/AboutPopUp'
 
 const bgColor = "bg-slate-400"
 
 export default function Home() {
 
   //const router = useRouter()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [keywordsList, setKeywordsList] = useState<string[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
-  const [filenames, setFilenames] = useState([]);
-  const [selectedFilename, setSelectedFilename] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [filenames, setFilenames] = useState([])
+  const [selectedFilename, setSelectedFilename] = useState('')
+  const [showModal, setShowModal] = useState(false)
   //const [content, setContent] = useState<string>('');
 
   useEffect(() => {
@@ -35,6 +37,15 @@ export default function Home() {
       .then((data) => setAboutInfo(JSON.parse(data.about)))
       .catch((error) => console.error('Error fetching about Info:', error));
   }, []);
+
+  // About functions
+  const openAboutPopup = () => {
+    setIsOpen(true);
+  };
+
+  const closeAboutPopup = () => {
+    setIsOpen(false);
+  };
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
     const newText : string = e.target.value;
@@ -130,15 +141,14 @@ export default function Home() {
             <button className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
               Pref.
             </button>
-            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={()=> null}>
-              About
-            </button>
+            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={openAboutPopup}>About</button>
+            {isOpen && <AboutPopUp isOpen={isOpen} onClose={closeAboutPopup} data={aboutInfo} />}
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className={`flex-1 flex flex-col justify-center items-center ${bgColor}`}>
+      <main className={`flex-1 flex flex-col justify-center items-center ${bgColor}`} id="main">  
         <div className="h-1/2 flex justify-between w-full">
 
           {/*EA*/}
