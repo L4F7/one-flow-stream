@@ -9,7 +9,6 @@ export async function POST(request : Request){
         const content = await request.text();
         const timestampedText = `Echo from server: at ${new Date().toISOString()}:\n ${content}`;
         console.log(timestampedText)
-        console.log(`Body Text: ${content}`)
         return NextResponse.json({message: 'File compiled successfully.', result : timestampedText}, { status: 200 })
     } catch (error) {
         console.error('ERROR en try: '+error);
