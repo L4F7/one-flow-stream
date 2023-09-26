@@ -80,6 +80,32 @@ export default function Home() {
     router.push('/about', {})
   }
 
+  // Scripts Calls
+  const callOpenScriptAPI = async () => {
+    try {
+      const response = await fetch('/api/script/3');
+      if (!response.ok) {
+        throw new Error('Failed to fetch content');
+      }
+      const data = await response.text();
+      setInputText(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const callSaveScriptAPI = async () => {
+    try {
+      await fetch('/api/script/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: inputText
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header Section */}
@@ -115,6 +141,8 @@ export default function Home() {
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Execute</button>
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Analyze</button>
+            <button className="h-1/6 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callOpenScriptAPI}>Open</button>
+            <button className="h-1/6 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callSaveScriptAPI}>Save</button>
           </div>
 
           {/*TA*/}
