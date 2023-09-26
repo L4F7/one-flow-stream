@@ -30,7 +30,7 @@ export default function Home() {
       fetch(`api/about`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Error calling About API');
         }
         return response.json()})
       .then((data) => setAboutInfo(JSON.parse(data.about)))
@@ -66,12 +66,12 @@ export default function Home() {
 
   const handleSendToServer = () => {
       //
-      fetch(`${API_SERVER_URL}/compile`, {
+      fetch(`api/compile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: inputText }),
+        body: inputText,
       })
         .then((response) => response.json())
         .then((data) => setOutputText(data.result))
