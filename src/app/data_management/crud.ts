@@ -4,11 +4,10 @@ import path from 'path';
 
 // This function is used to open the file
 export async function openFile(id: string) {
-    const filePath = path.resolve(`./src/app/data/scripts/${id}.ofs`);
-
     try {
+        const filePath = path.resolve(`./src/app/data/scripts/${id}.ofs`);
         const data = await fsPromises.readFile(filePath, 'utf8');
-        const jsonData = JSON.stringify({fileContent: data})
+        const jsonData = JSON.stringify({fileContent: data});
         return new Response(jsonData, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         return new Response('Error reading the file', { status: 500 });
@@ -31,9 +30,8 @@ export async function saveFile(request: Request, id: string) {
 
 // This function is used to list all the files in the directory
 export async function listFiles() {
-    const directoryPath = path.resolve(`./src/app/data/scripts`);
-
     try {
+        const directoryPath = path.resolve(`./src/app/data/scripts`);
         const files = (await fsPromises.readdir(directoryPath, 'utf8')).filter(file => file.endsWith('.ofs'));
         const jsonFiles = JSON.stringify(files);
         return new Response(jsonFiles, { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -52,18 +50,17 @@ export async function hashFileName(request: Request) {
         const jsonFileName = JSON.stringify(hashedFilename);
         return new Response(jsonFileName, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
-        console.error(error)
+        console.error(error);
         return new Response('Error reading the directory', { status: 500 });
     }
 }
 
 // This function is used to open the file that contains the evaluated script
 export async function openEvaluatedFile(){
-    const filePath = path.resolve(`./src/app/data/ra_script/ra_fake.txt`);
-
     try {
+        const filePath = path.resolve(`./src/app/data/ra_script/ra_fake.txt`);
         const data = await fsPromises.readFile(filePath, 'utf8');
-        const jsonData = JSON.stringify({fileData: data})
+        const jsonData = JSON.stringify({fileData: data});
         return new Response(jsonData, { status: 200, headers: { 'Content-Type': 'application/json' } });
 
     } catch (error) {
@@ -72,13 +69,27 @@ export async function openEvaluatedFile(){
 
 }
 
+export async function readAbout(){
+    try {
+        const filePath = path.resolve(`./src/app/data/about.json`);
+        const file = await fsPromises.readFile(filePath, 'utf-8');
+        const jsonFile = JSON.stringify({about: file, message: 'About file loaded successfully.'});
+        return new Response(jsonFile, { status: 200, headers: { 'Content-Type': 'application/json' },  })
+
+    } catch (error) {
+        console.error('ERROR en try: '+error);
+        return new Response('Error reading the file', { status: 500 });
+    }
+}
+
 // This object is used to export all the functions
 const crud = {
     openFile,
     saveFile,
     listFiles,
     hashFileName,
-    openEvaluatedFile
+    openEvaluatedFile,
+    readAbout
 };
 
 export default crud;
