@@ -19,11 +19,10 @@ export async function POST(request : Request){
         
         const fileSaved = await fsPromises.readFile(filePathSave, 'utf8');
 
-        // Log the result (optional)
         console.log(fileSaved);
 
         return NextResponse.json({message: 'File evaluated successfully.', result : fileSaved}, { status: 200 })
-        //return openEvaluatedFile();
+
     } catch (error) {
         console.error('ERROR en try: '+error);
         return NextResponse.json('Error evaluating TA script', { status: 500 });

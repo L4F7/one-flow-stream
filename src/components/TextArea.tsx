@@ -6,11 +6,11 @@ import { bgColor } from "../app/shared";
 import TextAreaInfo from "./TextAreaInfo";
 import LineCounterArea from './LineCounterArea';
 import ListOfKeywords from './ListOfKeywords';
-import mitt from "next/dist/shared/lib/mitt";
 
 interface TextAreaProps {
   content: string;
   setContent: (e : string) => void;
+  setTypedFilename?: (e : string) => void;
   height?: String;
   width?: String;
   backgroundColor: string;
@@ -20,7 +20,7 @@ interface TextAreaProps {
   showInfo?: boolean;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName = "", showInfo = true}) => {
+const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilename, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName, showInfo = true}) => {
 
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -58,7 +58,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
 
   interface Action {
     type: ActionType;
-    value: any; 
+    value: any;
   }
 
   const reducer = (state: State, { type, value }: Action): State => {
@@ -193,7 +193,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
 
   // Determine if the text should wrap or not
   const shouldWrap = () => setReadOnly ? "whitespace-pre-wrap" : "whitespace-nowrap";
-  
+
   return (
     <div className={`${height} ${width} p-4 ${bgColor}`}>
       {shouldListAppear && candidateKeywords.length > 0 && ( // If shouldListAppear is true, show the ListOfKeywords
@@ -205,11 +205,11 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
       <div className = "flex" style = {{ height: "95%", maxHeight: "800px" }}>
 
         {showInfo && ( // If showInfo is true, show the LineCounterArea
-          <LineCounterArea 
+          <LineCounterArea
             content={setReadOnly ? content : text}
-            lineCounterAreaRef={lineCounterAreaRef} 
+            lineCounterAreaRef={lineCounterAreaRef}
           />
-        )} 
+        )}
 
         <textarea
           ref={textareaRef}
@@ -225,12 +225,13 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
 
       {showInfo && ( // If showInfo is true, show the TextAreaInfo
         <TextAreaInfo
+          setTypedFilename = {setTypedFilename}
           wordCount = {wordCount}
           backgroundColor = {backgroundColor}
           textColor = {textColor}
           fileName = {fileName}
           cursorPosition = {cursorPosition}
-          textAreaReadOnly = {setReadOnly}
+          textAreaReadOnly = {false}
         />
       )}
 
