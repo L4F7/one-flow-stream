@@ -152,10 +152,11 @@ export default function Home() {
 
           {/*EA*/}
           <TextArea
-            content = {inputText}
+            content={inputText}
+            //wordCount = {wordCount}
+            handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
-            handleInputChange = {handleInputChange}
           />
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
@@ -209,24 +210,25 @@ export default function Home() {
 
           {/*TA*/}
           <TextArea
-            content = {outputText}
+            content={outputText}
+            handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
-            fileName = 'Output.js'
-            handleInputChange={handleInputChange}
+            fileName='Output.js'
           />
         </div>
 
         {/*RA*/}
         <div className={`h-1/2 w-full p-4 ${bgColor}`}>
           <TextArea
-            content = ""
-            height = "h-full"
+            content={""}
+            handleInputChange={handleInputChange}
+            height={"h-full"}
             backgroundColor = "bg-black"
             textColor = "text-white"
             setReadOnly = {true}
-            fileName = 'Output.js'
+            fileName='Output.js'
             showInfo = {false}
           />
         </div>

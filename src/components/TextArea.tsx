@@ -8,6 +8,7 @@ import LineCounterArea from './LineCounterArea';
 
 interface TextAreaProps {
   content: string;
+  handleInputChange: ChangeEventHandler;
   height?: String;
   width?: String;
   backgroundColor: string;
@@ -15,10 +16,9 @@ interface TextAreaProps {
   setReadOnly?: boolean;
   fileName?: string;
   showInfo?: boolean;
-  handleInputChange?: ChangeEventHandler;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({content, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName = "", showInfo = true}, handleInputChange = () => {}) => {
+const TextArea: React.FC<TextAreaProps> = ({content, handleInputChange, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName = "", showInfo = true}) => {
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const lineCounterAreaRef = useRef<HTMLDivElement | null>(null);
@@ -86,7 +86,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, height = "", width = "", ba
   );
 
   // Show the line numbers if enabled
-  const showLineCounterArea = () => (
+  const showNumbersArea = () => (
     showInfo && (
       <LineCounterArea 
         content={content}
@@ -94,11 +94,14 @@ const TextArea: React.FC<TextAreaProps> = ({content, height = "", width = "", ba
       />
     )
   );
+  
 
   return (
     <div className={`${height} ${width} p-4 ${bgColor}`}>
       <div className = "flex" style = {{ height: "95%", maxHeight: "800px" }}>
-        {showLineCounterArea()}
+
+        {showNumbersArea()} 
+
         <textarea
           ref={textareaRef}
           className={`h-auto max-h-full flex-1 p-2 border border-gray-200 text-black resize-none overflow-y-scroll cursor-auto ${textColor} ${backgroundColor}`}
@@ -108,7 +111,9 @@ const TextArea: React.FC<TextAreaProps> = ({content, height = "", width = "", ba
           readOnly={setReadOnly}
         />
       </div>
+
       {showTextAreaInfo()}
+
     </div>
   );
 };
