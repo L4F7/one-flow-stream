@@ -1,14 +1,15 @@
 "use client";
 // components/TextArea.tsx
 
-import React, { useState, useEffect, useRef, ChangeEventHandler } from "react";
+import React, { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react";
 import { bgColor } from "../app/shared";
 import TextAreaInfo from "./TextAreaInfo";
 import LineCounterArea from './LineCounterArea';
+import ListOfKeywords from './ListOfKeywords';
 
 interface TextAreaProps {
   content: string;
-  handleInputChange: ChangeEventHandler;
+  setContent: (e : string) => void;
   height?: String;
   width?: String;
   backgroundColor: string;
@@ -16,13 +17,56 @@ interface TextAreaProps {
   setReadOnly?: boolean;
   fileName?: string;
   showInfo?: boolean;
+  keywords: [];
 }
 
-const TextArea: React.FC<TextAreaProps> = ({content, handleInputChange, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName = "", showInfo = true}) => {
+const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName = "", showInfo = true, keywords = []}) => {
 
+  const [text, setText] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const lineCounterAreaRef = useRef<HTMLDivElement | null>(null);
   const [wordCount, setWordCount] = useState<number>(0);
+  const [shouldListAppear, setShouldListAppear] = useState<boolean>(false);
+  const [selectedText, setSelectedText] = useState<string>('');
+  const [candidateKeywords, setCandidateKeywords] = useState<string[]>([]);
+
+  // Handle keywords when words are typed in, a selector will show up automatically suggesting words from keywords list
+  const handleChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
+    const newText : string = e.target.value;
+    setText(newText);
+    setContent(newText);
+    if(newText.length == 0 || candidateKeywords.length == 0) setShouldListAppear(false);
+    //setShouldListAppear(true);
+
+    const words : string[] = (text != null) ? newText.split(/\s+/) : [];
+    const lastWord : string = words[words.length - 1];
+
+    setSelectedText(lastWord); 
+
+    if(newText.length == 1){
+      setCandidateKeywords( keywords.filter((keyword: string) => keyword.startsWith(lastWord)));
+      setShouldListAppear(true);
+    }
+    else setCandidateKeywords(keywords.filter((keyword: string) => keyword.startsWith(lastWord)));
+
+    if(candidateKeywords.length > 0) setShouldListAppear(true);
+
+  }
+
+  const handleOnKeyDown = (e : KeyboardEvent<HTMLTextAreaElement>) => {
+    if(e.key === ' ' || e.key === 'Enter' || e.key === 'Backspace') setShouldListAppear(false);
+
+  }
+
+  //Handle function when keyword is selected, it will replace last word of the text with the selection
+  const handleKeywordSelect = (keyword: string) => {
+
+    const replacedText = text.replace(/\S+$/, keyword); // This line takes the last word from the TextArea and replaces it with the Keyword selected
+
+    setText(replacedText);
+    setContent(replacedText);
+    setShouldListAppear(false);
+  };
 
   const countWords = (validationText: string) => {
 
@@ -63,14 +107,6 @@ const TextArea: React.FC<TextAreaProps> = ({content, handleInputChange, height =
       textarea.addEventListener("scroll", handleScroll);
     }
 
-    /*
-    return () => {
-      if (textarea) {
-        textarea.removeEventListener("scroll", handleScroll);
-      }
-    };
-    */
-
   }, []);
 
   // Show the word count, file name, and number of lines if enabled
@@ -89,7 +125,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, handleInputChange, height =
   const showNumbersArea = () => (
     showInfo && (
       <LineCounterArea 
-        content={content}
+        content={setReadOnly ? content : text}
         lineCounterAreaRef={lineCounterAreaRef} 
       />
     )
@@ -98,6 +134,12 @@ const TextArea: React.FC<TextAreaProps> = ({content, handleInputChange, height =
 
   return (
     <div className={`${height} ${width} p-4 ${bgColor}`}>
+      {shouldListAppear && candidateKeywords.length > 0 && (
+        <ListOfKeywords
+          keywords={candidateKeywords}
+          onSelect={handleKeywordSelect}
+        />
+      )}
       <div className = "flex" style = {{ height: "95%", maxHeight: "800px" }}>
 
         {showNumbersArea()} 
@@ -105,9 +147,10 @@ const TextArea: React.FC<TextAreaProps> = ({content, handleInputChange, height =
         <textarea
           ref={textareaRef}
           className={`h-auto max-h-full flex-1 p-2 border border-gray-200 text-black resize-none overflow-y-scroll cursor-auto ${textColor} ${backgroundColor}`}
-          style={{ whiteSpace: 'nowrap' }}
-          value={content}
-          onChange={handleInputChange}
+          //style={{ whiteSpace: 'nowrap' }}
+          value={setReadOnly ? content : text}
+          onKeyDown={handleOnKeyDown}
+          onChange={handleChange}
           readOnly={setReadOnly}
         />
       </div>

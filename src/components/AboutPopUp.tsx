@@ -20,7 +20,13 @@ const popUpStyle: PopUp.Styles = {
   },
 };
 
-const AboutPopUp = ({ isOpen, onClose, data}:{isOpen: boolean; onClose: () => void; data: any;}) => {
+interface AboutPopUpProps {
+  isOpen: boolean;
+  onClose: () => void
+  data: any;
+}
+
+const AboutPopUp : React.FC<AboutPopUpProps> = ({ isOpen, onClose, data}) => {
   
 console.log(JSON.stringify(data))
 

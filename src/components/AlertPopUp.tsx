@@ -23,7 +23,14 @@ const popUpStyle: PopUp.Styles = {
   },
 };
 
-const AlertPopUp = ({ isOpen, onClose, message, type}:{isOpen: boolean, onClose: () => void, message: string, type: string}) => {
+interface AlertPopUpProps {
+  isOpen: boolean;
+  onClose: () => void;
+  message: string;
+  type: string;
+}
+
+const AlertPopUp : React.FC<AlertPopUpProps> = ({ isOpen, onClose, message, type}) => {
 
   return (
     <PopUp isOpen={isOpen} onRequestClose={onClose} contentLabel="Popup Modal" style={popUpStyle}>

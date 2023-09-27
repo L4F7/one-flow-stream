@@ -15,20 +15,20 @@ export default function Home() {
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [alertType, setAlertType] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [keywordsList, setKeywordsList] = useState<string[]>([])
+  const [keywordsList, setKeywordsList] = useState<[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
   const [filenames, setFilenames] = useState([])
   const [selectedFilename, setSelectedFilename] = useState('')
   const [showModal, setShowModal] = useState(false)
-  //const [content, setContent] = useState<string>('');
+  const [content, setContent] = useState<string>('');
 
   useEffect(() => {
 
     fetch(`api/keywords`)
       .then((response) => response.json())
-      .then((data) => setKeywordsList(data.keywords))
+      .then((data) => setKeywordsList(JSON.parse(data.keywords)))
       .catch((error) => console.error('Error fetching keywords:', error));
 
       fetch(`api/about`)
@@ -55,27 +55,14 @@ export default function Home() {
     setAlertIsOpen(false);
   };
 
-  const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
-    const newText : string = e.target.value;
-    const words : string[] = newText.split(/\s+/);
-
-    const individualWords: string[] = words
-                                      .map((word) => word.trim())
-                                      .filter((trimmedWord) => keywordsList.includes(trimmedWord));
-
-    const processedText: string = individualWords.join(' ');
-
-    setInputText(newText);
-    setOutputText(processedText);
-  };
-
+  //API to call /Compile service from server using POST
   const handleSendToServer = () => {
       fetch(`api/compile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: inputText,
+        body: content,
       })
         .then((response) => {
           if (!response.ok) {
@@ -85,7 +72,7 @@ export default function Home() {
           }
           return response.json()
         })
-        .then((data) => setOutputText(data.result))
+        .then((data) => {setOutputText(data.result); console.log(`RESULT FROM COMPILE: ${data.result}`)})
         .catch((error) => { 
             setAlertMessage(error.message); setAlertType('Error'); 
             setAlertIsOpen(true);
@@ -146,6 +133,7 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col">
+      {/* Alert PopUp Section */}
       {alertIsOpen && <AlertPopUp isOpen = {alertIsOpen} onClose = {closeAlertPopup} message = {alertMessage} type = {alertType} />}
       {/* Header Section */}
       <header className="bg-slate-700 text-white p-4">
@@ -169,11 +157,13 @@ export default function Home() {
 
           {/*EA*/}
           <TextArea
-            content={inputText}
+            content={content}
+            setContent={setContent}
             //wordCount = {wordCount}
-            handleInputChange={handleInputChange}
+            //handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
+            keywords = {keywordsList}
           />
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
@@ -228,11 +218,13 @@ export default function Home() {
           {/*TA*/}
           <TextArea
             content={outputText}
-            handleInputChange={handleInputChange}
+            setContent={setContent}
+            //handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
             fileName='Output.js'
+            keywords = {keywordsList}
           />
         </div>
 
@@ -240,13 +232,15 @@ export default function Home() {
         <div className={`h-1/2 w-full p-4 ${bgColor}`}>
           <TextArea
             content={""}
-            handleInputChange={handleInputChange}
+            setContent={setContent}
+            //handleInputChange={handleInputChange}
             height={"h-full"}
             backgroundColor = "bg-black"
             textColor = "text-white"
             setReadOnly = {true}
             fileName='Output.js'
             showInfo = {false}
+            keywords = {keywordsList}
           />
         </div>
       </main>
