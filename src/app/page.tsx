@@ -1,47 +1,51 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent } from 'react'
-import { useRouter } from 'next/navigation'
-import {API_SERVER_URL} from '../components/Url'
+//import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
 import CodeEditor from '../components/CodeEditor'
+import AboutPopUp from '../components/AboutPopUp'
 
 const bgColor = "bg-slate-400"
 
 export default function Home() {
 
-  const router = useRouter()
+  //const router = useRouter()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [keywordsList, setKeywordsList] = useState<string[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
   const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
-  const [filenames, setFilenames] = useState([]);
-  const [selectedFilename, setSelectedFilename] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [content, setContent] = useState<string>('');
+  const [filenames, setFilenames] = useState([])
+  const [selectedFilename, setSelectedFilename] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  //const [content, setContent] = useState<string>('');
 
   useEffect(() => {
 
-    fetch(`${API_SERVER_URL}/keywords`)
+    fetch(`api/keywords`)
       .then((response) => response.json())
       .then((data) => setKeywordsList(data.keywords))
       .catch((error) => console.error('Error fetching keywords:', error));
 
-      fetch(`${API_SERVER_URL}/about`)
-      .then((response) => response.json())
+      fetch(`api/about`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Error calling About API');
+        }
+        return response.json()})
       .then((data) => setAboutInfo(JSON.parse(data.about)))
       .catch((error) => console.error('Error fetching about Info:', error));
   }, []);
 
+  // About functions
+  const openAboutPopup = () => {
+    setIsOpen(true);
+  };
 
-  /*const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const newText: string = event.target.value;
-
-    // Call multiple handleChange functions
-    handleInputChange(event);
-    //setContent(event.target.value);
-    //countWords(event.target.value);
-  };*/
+  const closeAboutPopup = () => {
+    setIsOpen(false);
+  };
 
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
     const newText : string = e.target.value;
@@ -61,27 +65,17 @@ export default function Home() {
   };
 
   const handleSendToServer = () => {
-      //
-      fetch(`${API_SERVER_URL}/compile`, {
+      fetch(`api/compile`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: inputText }),
+        body: inputText,
       })
         .then((response) => response.json())
         .then((data) => setOutputText(data.result))
         .catch((error) => console.error('Error sending data to server:', error));
     };
-
-  // About API Call
-  const callAboutAPI = async () => {
-    await fetch('/api/about',{
-      method: 'POST',
-      body: JSON.stringify(aboutInfo),
-    })
-    router.push('/about', {})
-  }
 
   // Scripts Calls
   const callOpenScriptAPI = async () => {
@@ -147,15 +141,14 @@ export default function Home() {
             <button className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
               Pref.
             </button>
-            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callAboutAPI}>
-              About
-            </button>
+            <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={openAboutPopup}>About</button>
+            {isOpen && <AboutPopUp isOpen={isOpen} onClose={closeAboutPopup} data={aboutInfo} />}
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className={`flex-1 flex flex-col justify-center items-center ${bgColor}`}>
+      <main className={`flex-1 flex flex-col justify-center items-center ${bgColor}`} id="main">  
         <div className="h-1/2 flex justify-between w-full">
 
           {/*EA*/}
