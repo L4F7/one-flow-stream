@@ -5,7 +5,6 @@ export async function GET(
     { params }: { params: { id: number } }
   ) {
     const id = params.id;
-
     const response = await crud.openFile(id);
     return response;
 }

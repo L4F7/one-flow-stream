@@ -13,7 +13,7 @@ const popUpStyle: PopUp.Styles = {
   },
   content: {
     width: '350px',
-    height: '200px',
+    height: '250px',
     margin: 'auto',
     padding: '20px',
     borderRadius: '10px',
@@ -36,7 +36,7 @@ const AlertPopUp : React.FC<AlertPopUpProps> = ({ isOpen, onClose, message, type
     <PopUp isOpen={isOpen} onRequestClose={onClose} contentLabel="Popup Modal" style={popUpStyle}>
       <div className="flex items-center">
         <div>
-          <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-500 text-2xl mr-2" /> Alerta
+          <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-500 text-2xl mr-2" /> Alert
           <br />
           <br />
           <p>{message}</p>

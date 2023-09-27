@@ -15,9 +15,7 @@ export default function Home() {
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [alertType, setAlertType] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [keywordsList, setKeywordsList] = useState<[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
-  const [inputText, setInputText] = useState<string>('')
   const [outputText, setOutputText] = useState<string>('')
   const [filenames, setFilenames] = useState([])
   const [selectedFilename, setSelectedFilename] = useState('')
@@ -25,11 +23,6 @@ export default function Home() {
   const [content, setContent] = useState<string>('');
 
   useEffect(() => {
-
-    fetch(`api/keywords`)
-      .then((response) => response.json())
-      .then((data) => setKeywordsList(JSON.parse(data.keywords)))
-      .catch((error) => console.error('Error fetching keywords:', error));
 
       fetch(`api/about`)
       .then((response) => {
@@ -66,15 +59,14 @@ export default function Home() {
       })
         .then((response) => {
           if (!response.ok) {
-            return response.json().then((data) =>{
-              throw data
-            })
+            throw new Error('Unable to compile, please type a script before continue');
           }
           return response.json()
         })
         .then((data) => {setOutputText(data.result); console.log(`RESULT FROM COMPILE: ${data.result}`)})
         .catch((error) => { 
-            setAlertMessage(error.message); setAlertType('Error'); 
+            setAlertMessage(`${error}`); 
+            setAlertType('Error'); 
             setAlertIsOpen(true);
         });
     };
@@ -88,19 +80,22 @@ export default function Home() {
         throw new Error('Failed to fetch content');
       }
       const data = await response.text();
-      setInputText(data);
+      setContent(data);
     } catch (error) {
       console.error(error);
+      setAlertMessage(`${error}`); 
+      setAlertType('Error'); 
+      setAlertIsOpen(true);
     }
   }
 
   const callSaveScriptAPI = async () => {
     try {
-      if (inputText.length > 0){
+      if (content.length > 0){
         await fetch('/api/script/save', {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain' },
-          body: inputText
+          body: content
         });
       } else {
         throw new Error('Please type a script to save.')
@@ -108,6 +103,9 @@ export default function Home() {
 
     } catch (error) {
       console.error(error);
+      setAlertMessage(`${error}`); 
+      setAlertType('Error'); 
+      setAlertIsOpen(true);
     }
   }
 
@@ -163,7 +161,6 @@ export default function Home() {
             //handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
-            keywords = {keywordsList}
           />
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
@@ -224,7 +221,6 @@ export default function Home() {
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
             fileName='Output.js'
-            keywords = {keywordsList}
           />
         </div>
 
@@ -240,7 +236,6 @@ export default function Home() {
             setReadOnly = {true}
             fileName='Output.js'
             showInfo = {false}
-            keywords = {keywordsList}
           />
         </div>
       </main>
