@@ -32,7 +32,7 @@ export default function Home() {
     alertMessage: string;
     alertType: string;
     isOpen: boolean;
-    aboutInfo: string[];
+    aboutInfo: any;
     outputText: string;
     filenames: string[];
     selectedFilename: string;
