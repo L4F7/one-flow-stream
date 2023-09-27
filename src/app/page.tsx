@@ -21,6 +21,7 @@ export default function Home() {
   const [selectedFilename, setSelectedFilename] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [content, setContent] = useState<string>('');
+  const [raContent, raSetContent] = useState<string>('');
 
   useEffect(() => {
 
@@ -70,6 +71,30 @@ export default function Home() {
             setAlertIsOpen(true);
         });
     };
+
+  //API to call /Eval service from server using GET
+  const callEvaluateScript = async () => {
+
+    fetch(`api/eval`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: "TA Content",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Unable to evaluate, please type a script before continue');
+        }
+        return response.json()
+      })
+      .then((data) => {raSetContent(data.fileData)})
+      .catch((error) => {
+          setAlertMessage(`${error}`);
+          setAlertType('Error');
+          setAlertIsOpen(true);
+      });
+  }
 
   // Scripts Calls
   const callOpenScriptAPI = async () => {
@@ -164,8 +189,8 @@ export default function Home() {
           />
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
-            <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Execute</button>
-            <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">Analyze</button>
+            <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callEvaluateScript}>Evaluate</button>
+            <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" >Execute</button>
             <button className="h-1/6 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callListScriptAPI}>Open</button>
             <button className="h-1/6 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={callSaveScriptAPI}>Save</button>
           </div>
@@ -227,7 +252,7 @@ export default function Home() {
         {/*RA*/}
         <div className={`h-1/2 w-full p-4 ${bgColor}`}>
           <TextArea
-            content={""}
+            content={raContent}
             setContent={setContent}
             //handleInputChange={handleInputChange}
             height={"h-full"}
