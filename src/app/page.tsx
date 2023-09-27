@@ -5,12 +5,16 @@ import { useState, useEffect, ChangeEvent } from 'react'
 import TextArea from '../components/TextArea'
 import CodeEditor from '../components/CodeEditor'
 import AboutPopUp from '../components/AboutPopUp'
+import AlertPopUp from '../components/AlertPopUp'
 
 const bgColor = "bg-slate-400"
 
 export default function Home() {
 
   //const router = useRouter()
+  const [alertIsOpen, setAlertIsOpen] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState<string>('')
+  const [alertType, setAlertType] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [keywordsList, setKeywordsList] = useState<string[]>([])
   const [aboutInfo, setAboutInfo] = useState<string[]>([])
@@ -47,9 +51,13 @@ export default function Home() {
     setIsOpen(false);
   };
 
+  // Alert Dialog functions
+  const closeAlertPopup = () => {
+    setAlertIsOpen(false);
+  };
+
   const handleInputChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
     const newText : string = e.target.value;
-    console.log(`New text received: ${newText}`)
     const words : string[] = newText.split(/\s+/);
 
     const individualWords: string[] = words
@@ -60,8 +68,6 @@ export default function Home() {
 
     setInputText(newText);
     setOutputText(processedText);
-    console.log(`INPUT: ${newText}`)
-    console.log(`OUTPUT: ${newText}`)
   };
 
   const handleSendToServer = () => {
@@ -72,9 +78,19 @@ export default function Home() {
         },
         body: inputText,
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((data) =>{
+              throw data
+            })
+          }
+          return response.json()
+        })
         .then((data) => setOutputText(data.result))
-        .catch((error) => console.error('Error sending data to server:', error));
+        .catch((error) => { 
+            setAlertMessage(error.message); setAlertType('Error'); 
+            setAlertIsOpen(true);
+        });
     };
 
   // Scripts Calls
@@ -131,6 +147,7 @@ export default function Home() {
 
   return (
     <div className="h-screen flex flex-col">
+      {alertIsOpen && <AlertPopUp isOpen = {alertIsOpen} onClose = {closeAlertPopup} message = {alertMessage} type = {alertType} />}
       {/* Header Section */}
       <header className="bg-slate-700 text-white p-4">
         <div className="flex justify-between">

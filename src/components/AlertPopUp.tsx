@@ -1,0 +1,44 @@
+import { bgColor } from '@/app/shared';
+import { Content } from 'next/font/google';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect } from 'react';
+import PopUp from 'react-modal';
+
+PopUp.setAppElement('#main');
+
+const popUpStyle: PopUp.Styles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  content: {
+    width: '350px',
+    height: '200px',
+    margin: 'auto',
+    padding: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+    color:'black',
+    textAlign:'center',
+  },
+};
+
+const AlertPopUp = ({ isOpen, onClose, message, type}:{isOpen: boolean, onClose: () => void, message: string, type: string}) => {
+
+  return (
+    <PopUp isOpen={isOpen} onRequestClose={onClose} contentLabel="Popup Modal" style={popUpStyle}>
+      <div className="flex items-center">
+        <div>
+          <FontAwesomeIcon icon={faExclamationTriangle} className="text-red-500 text-2xl mr-2" /> Alerta
+          <br />
+          <br />
+          <p>{message}</p>
+        </div>
+      </div>
+      <br />
+      <button onClick={onClose} className="h-1/10 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"> Cerrar </button>
+</PopUp>
+  );
+};
+
+export default AlertPopUp;
