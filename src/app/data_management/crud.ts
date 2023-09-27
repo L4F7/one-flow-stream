@@ -3,7 +3,7 @@ import { createHash } from 'crypto';
 import path from 'path';
 
 export async function openFile(id: string) {
-    const filePath = path.resolve(`./src/app/api/script/${id}.ofs`);
+    const filePath = path.resolve(`./src/app/data/scripts/${id}.ofs`);
 
     try {
         const data = await fsPromises.readFile(filePath, 'utf8');
@@ -18,7 +18,7 @@ export async function saveFile(request: Request, id: string) {
     try {
         const jsonData = await request.json();
         const content = jsonData.fileContent;
-        const filePath = path.resolve(`./src/app/api/script/${id}.ofs`);
+        const filePath = path.resolve(`./src/app/data/scripts/${id}.ofs`);
 
         await fsPromises.writeFile(filePath, content, 'utf-8');
         return new Response('File created successfully.', { status: 200 });
@@ -28,7 +28,7 @@ export async function saveFile(request: Request, id: string) {
 }
 
 export async function listFiles() {
-    const directoryPath = path.resolve(`./src/app/api/script`);
+    const directoryPath = path.resolve(`./src/app/data/scripts`);
 
     try {
         const files = (await fsPromises.readdir(directoryPath, 'utf8')).filter(file => file.endsWith('.ofs'));

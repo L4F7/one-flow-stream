@@ -109,6 +109,7 @@ export default function Home() {
       const data = await response.json();
       setContent(data.fileContent);
       setTypedFilename(filename);
+      setOutputText("");
     } catch (error) {
       console.error(error);
       setAlertMessage(`${error}`);
