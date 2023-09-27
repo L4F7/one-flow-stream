@@ -2,9 +2,7 @@ Proyecto OneFlowStream (OFS)
 
 Pasos para la ejecución la aplicación:
 
-Instrucciones para ejecutar el proyecto
-
-1. Clonar la rama principal ("Master") y descargar el código por medio del comando:
+1. Clonar la rama principal ("Master") y descargar el código por medio del comando: 
 
 	- git clone enlace del proy.
 

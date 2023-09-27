@@ -162,7 +162,7 @@ export default function Home() {
         }
         return response.json()
       })
-      .then((data) => {dispatch({ type: "RA_SET_CONTENT", value: data.fileData })})
+      .then((data) => {dispatch({ type: "RA_SET_CONTENT", value: data.result })})
       .catch((error) => {
         dispatch({ type: "RA_SET_CONTENT", value: error.message })
         dispatch({ type: "SET_ALERT_MESSAGE", value: `${error}` });
