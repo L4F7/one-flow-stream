@@ -1,12 +1,11 @@
 "use client";
 // components/TextArea.tsx
 
-import React, { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react";
+import React, { useReducer, useEffect, useRef, KeyboardEvent, ChangeEvent } from "react";
 import { bgColor } from "../app/shared";
 import TextAreaInfo from "./TextAreaInfo";
 import LineCounterArea from './LineCounterArea';
 import ListOfKeywords from './ListOfKeywords';
-import mitt from "next/dist/shared/lib/mitt";
 
 interface TextAreaProps {
   content: string;
@@ -23,37 +22,90 @@ interface TextAreaProps {
 
 const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilename, height = "", width = "", backgroundColor, textColor = "text-black", setReadOnly = false, fileName, showInfo = true}) => {
 
-  const [text, setText] = useState<string>('');
+
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [keywords, setKeywords] = useState<[]>([])
   const lineCounterAreaRef = useRef<HTMLDivElement | null>(null);
-  const [wordCount, setWordCount] = useState<number>(0);
-  const [shouldListAppear, setShouldListAppear] = useState<boolean>(false);
-  const [candidateKeywords, setCandidateKeywords] = useState<string[]>([]);
-  const [cursorPosition, setCursorPosition] = useState<number[]>([0, 0]);
+
+  // Define the types of actions that can be dispatched
+  type ActionType =
+  | "SET_TEXT"
+  | "SET_KEYWORDS"
+  | "SET_WORD_COUNT"
+  | "SET_CURSOR_POSITION"
+  | "SET_SHOULD_LIST_APPEAR"
+  | "SET_CANDIDATE_KEYWORDS";
+
+
+  // Define the types of state that can be used in the reducer
+  interface State {
+    text: string;
+    keywords: string[];
+    wordCount: number;
+    cursorPosition: [number, number];
+    shouldListAppear: boolean;
+    candidateKeywords: string[];
+  }
+
+  // Define the initial state of the reducer
+  const initialState: State = {
+    text: "",
+    keywords: [],
+    wordCount: 0,
+    cursorPosition: [0, 0],
+    shouldListAppear: false,
+    candidateKeywords: [],
+  };
+
+  interface Action {
+    type: ActionType;
+    value: any;
+  }
+
+  const reducer = (state: State, { type, value }: Action): State => {
+    switch (type) {
+      case "SET_TEXT":
+        return { ...state, text: value };
+      case "SET_KEYWORDS":
+        return { ...state, keywords: value };
+      case "SET_WORD_COUNT":
+        return { ...state, wordCount: value };
+      case "SET_CURSOR_POSITION":
+        return { ...state, cursorPosition: value };
+      case "SET_SHOULD_LIST_APPEAR":
+        return { ...state, shouldListAppear: value };
+      case "SET_CANDIDATE_KEYWORDS":
+        return { ...state, candidateKeywords: value };
+      default:
+        return state;
+    }
+  };
+
+  const [ { text, keywords, wordCount, cursorPosition, shouldListAppear, candidateKeywords }, dispatch] = useReducer(reducer, initialState);
 
   // Handle keywords when words are typed in, a selector will show up automatically suggesting words from keywords list
-  const handleChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
-    const newText : string = e.target.value;
-    setText(newText);
+  const handleChange = ({ target: { value } }: { target: { value: string } }) => {
+
+    const newText : string = value;
+
+    dispatch({ type: 'SET_TEXT', value: newText });
     setContent(newText);
-    if(newText.length == 0 || candidateKeywords.length == 0) setShouldListAppear(false);
+
+    if(newText.length == 0 || candidateKeywords.length == 0) dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: false });
 
     const words : string[] = (text != null) ? newText.split(/\s+/) : [];
     const lastWord : string = words[words.length - 1];
+    const filteredKeywords = keywords.filter((keyword: string) => keyword.startsWith(lastWord));
 
-    if(newText.length == 1){
-      setCandidateKeywords( keywords.filter((keyword: string) => keyword.startsWith(lastWord)));
-      setShouldListAppear(true);
+    dispatch({ type: 'SET_CANDIDATE_KEYWORDS', value: filteredKeywords });
+
+    if (newText.length === 1 || filteredKeywords.length > 0) {
+      dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: true })
     }
-    else setCandidateKeywords(keywords.filter((keyword: string) => keyword.startsWith(lastWord)));
-
-    if(candidateKeywords.length > 0) setShouldListAppear(true);
 
   }
 
   const handleOnKeyDown = (e : KeyboardEvent<HTMLTextAreaElement>) => {
-    if(e.key === ' ' || e.key === 'Enter' || e.key === 'Backspace') setShouldListAppear(false);
+    if(e.key === ' ' || e.key === 'Enter' || e.key === 'Backspace') dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: false });
 
   }
 
@@ -62,9 +114,9 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
 
     const replacedText = text.replace(/\S+$/, keyword); // This line takes the last word from the TextArea and replaces it with the Keyword selected
 
-    setText(replacedText);
     setContent(replacedText);
-    setShouldListAppear(false);
+    dispatch({ type: 'SET_TEXT', value: replacedText });
+    dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: false });
   };
 
   // Function to count Words in the TextArea
@@ -72,7 +124,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
 
     // If the text is empty, set the word count to 0
     if (validationText === "") {
-      setWordCount(0);
+      dispatch({ type: 'SET_WORD_COUNT', value: 0 });
       return;
     }
 
@@ -83,8 +135,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
 
     // Count the number of spaces in the text and add 1 to get the word count
     const newWordCount = (cleanText.match(/ /g) || []).length + 1;
-
-    setWordCount(newWordCount);
+    dispatch({ type: 'SET_WORD_COUNT', value: newWordCount });
   };
 
   // Fetch Keywords from API service
@@ -92,7 +143,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
 
     fetch(`api/keywords`)
     .then((response) => response.json())
-    .then((data) => setKeywords(JSON.parse(data.keywords)))
+    .then((data) => dispatch({type: 'SET_KEYWORDS', value: JSON.parse(data.keywords)}))
     .catch((error) => console.error('Error fetching keywords:', error));
 
   }, []);
@@ -136,7 +187,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
     if (textareaRef.current) {
       const textAreaValue = textareaRef.current.value;
       const currentPosition = calculateCursorPosition(textAreaValue, textareaRef.current.selectionStart);
-      setCursorPosition(currentPosition);
+      dispatch({ type: 'SET_CURSOR_POSITION', value: currentPosition });
     }
   };
 
@@ -145,7 +196,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
 
   return (
     <div className={`${height} ${width} p-4 ${bgColor}`}>
-      {shouldListAppear && candidateKeywords.length > 0 && (
+      {shouldListAppear && candidateKeywords.length > 0 && ( // If shouldListAppear is true, show the ListOfKeywords
         <ListOfKeywords
           keywords={candidateKeywords}
           onSelect={handleKeywordSelect}
@@ -153,7 +204,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
       )}
       <div className = "flex" style = {{ height: "95%", maxHeight: "800px" }}>
 
-        {showInfo && (
+        {showInfo && ( // If showInfo is true, show the LineCounterArea
           <LineCounterArea
             content={setReadOnly ? content : text}
             lineCounterAreaRef={lineCounterAreaRef}
@@ -172,7 +223,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, setTypedFilenam
         />
       </div>
 
-      {showInfo && (
+      {showInfo && ( // If showInfo is true, show the TextAreaInfo
         <TextAreaInfo
           setTypedFilename = {setTypedFilename}
           wordCount = {wordCount}
