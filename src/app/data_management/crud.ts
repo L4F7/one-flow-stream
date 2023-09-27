@@ -6,7 +6,8 @@ export async function openFile(id: number) {
 
     try {
         const data = await fsPromises.readFile(filePath, 'utf8');
-        return new Response(data, { status: 200 });
+        const jsonData = JSON.stringify({fileContent: data})
+        return new Response(jsonData, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         console.error(error)
         return new Response('Error reading the file', { status: 500 });
@@ -15,7 +16,8 @@ export async function openFile(id: number) {
 
 export async function saveFile(request: Request) {
     try {
-        const content = await request.text();
+        const jsonData = await request.json();
+        const content = jsonData.fileContent;
         const filePath = path.resolve(`./src/app/api/script/4.js`);
 
         await fsPromises.writeFile(filePath, content, 'utf-8');
