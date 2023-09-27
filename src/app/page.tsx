@@ -3,7 +3,6 @@
 import { useState, useEffect, ChangeEvent } from 'react'
 //import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
-import CodeEditor from '../components/CodeEditor'
 import AboutPopUp from '../components/AboutPopUp'
 import AlertPopUp from '../components/AlertPopUp'
 
@@ -169,7 +168,7 @@ export default function Home() {
         <div className="h-1/2 flex justify-between w-full">
 
           {/*EA*/}
-          <CodeEditor
+          <TextArea
             content={inputText}
             //wordCount = {wordCount}
             handleInputChange={handleInputChange}
@@ -227,9 +226,8 @@ export default function Home() {
           </div>
 
           {/*TA*/}
-          <CodeEditor
+          <TextArea
             content={outputText}
-            // wordCount = {wordCount}
             handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
@@ -241,9 +239,14 @@ export default function Home() {
         {/*RA*/}
         <div className={`h-1/2 w-full p-4 ${bgColor}`}>
           <TextArea
+            content={""}
+            handleInputChange={handleInputChange}
+            height={"h-full"}
             backgroundColor = "bg-black"
             textColor = "text-white"
             setReadOnly = {true}
+            fileName='Output.js'
+            showInfo = {false}
           />
         </div>
       </main>
