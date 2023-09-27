@@ -92,6 +92,7 @@ export default function Home() {
       })
       .then((data) => {raSetContent(data.result); console.log(`RESULT: ${data.result}`)})
       .catch((error) => {
+          raSetContent(error.message);
           setAlertMessage(`${error}`);
           setAlertType('Error');
           setAlertIsOpen(true);

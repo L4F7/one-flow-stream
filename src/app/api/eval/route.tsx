@@ -8,8 +8,7 @@ export async function POST(request : Request){
     try {
 
         const content = await request.text();
-        if(!content) return NextResponse.json({message: 'Error: No hay datos en el area de TA'}, { status: 500 })
-
+        if(!content || content.length == 0) return NextResponse.json({message: 'Error: No hay datos en el area de TA'}, { status: 500 })
         const filePathLoad = `./src/app/api/script/Output.js`;
         const code = await fsPromises.readFile(filePathLoad, 'utf8');
         // Execute the JavaScript code
@@ -19,13 +18,11 @@ export async function POST(request : Request){
         
         const fileSaved = await fsPromises.readFile(filePathSave, 'utf8');
 
-        console.log(fileSaved);
-
         return NextResponse.json({message: 'File evaluated successfully.', result : fileSaved}, { status: 200 })
 
     } catch (error) {
         console.error('ERROR en try: '+error);
-        return NextResponse.json('Error evaluating TA script', { status: 500 });
+        return NextResponse.json({message: 'Error evaluating TA script'}, { status: 500 });
     }
 
 }
