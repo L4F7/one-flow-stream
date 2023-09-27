@@ -19,6 +19,8 @@ export default function Home() {
   const [outputText, setOutputText] = useState<string>('')
   const [filenames, setFilenames] = useState([])
   const [selectedFilename, setSelectedFilename] = useState('')
+  const [typedFilename, setTypedFilename] = useState('')
+ // const [hashedFilename, sethashedFilename] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [content, setContent] = useState<string>('');
 
@@ -81,6 +83,7 @@ export default function Home() {
       }
       const data = await response.json();
       setContent(data.fileContent);
+      setTypedFilename(filename);
     } catch (error) {
       console.error(error);
       setAlertMessage(`${error}`);
@@ -92,14 +95,19 @@ export default function Home() {
   const callSaveScriptAPI = async () => {
     try {
       if (content.length > 0){
-        const requestBody = JSON.stringify({ fileContent: content });
-        await fetch('/api/script/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: requestBody
-        });
+        if (typedFilename !== '') {
+          const requestBody = JSON.stringify({ fileContent: content });
+          console.log(typedFilename);
+          await fetch(`/api/script/save/${typedFilename}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: requestBody
+          });
+        } else {
+          throw new Error('Please type a name for the script.');
+        }
       } else {
-        throw new Error('Please type a script to save.')
+        throw new Error('Please type a script to save.');
       }
     } catch (error) {
       console.error(error);
@@ -122,6 +130,29 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  /*const callHashNameScriptAPI = async () => {
+    try {
+      const requestBody = JSON.stringify({ fileName: typedFilename });
+      const response = await fetch('/api/script/hashName', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: requestBody
+      });
+      const data = await response.json();
+      sethashedFilename(data);
+    } catch (error) {
+      console.error(error);
+      setAlertMessage(`${error}`);
+      setAlertType('Error');
+      setAlertIsOpen(true);
+    }
+  }*/
+
+  const handleTypedFilenameChange = (value: string) => {
+    setTypedFilename(value);
+    //callHashNameScriptAPI();
   }
 
   const handleFilenameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -157,6 +188,8 @@ export default function Home() {
           <TextArea
             content={content}
             setContent={setContent}
+            fileName={typedFilename}
+            setTypedFilename={handleTypedFilenameChange}
             //wordCount = {wordCount}
             //handleInputChange={handleInputChange}
             width = "w-1/2"
@@ -220,7 +253,7 @@ export default function Home() {
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
-            fileName='Output.js'
+            fileName="Output.js"
           />
         </div>
 
@@ -234,7 +267,7 @@ export default function Home() {
             backgroundColor = "bg-black"
             textColor = "text-white"
             setReadOnly = {true}
-            fileName='Output.js'
+            fileName="Output.js"
             showInfo = {false}
           />
         </div>
