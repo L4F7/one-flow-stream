@@ -64,9 +64,9 @@ export default function Home() {
           return response.json()
         })
         .then((data) => {setOutputText(data.result); console.log(`RESULT FROM COMPILE: ${data.result}`)})
-        .catch((error) => { 
-            setAlertMessage(`${error}`); 
-            setAlertType('Error'); 
+        .catch((error) => {
+            setAlertMessage(`${error}`);
+            setAlertType('Error');
             setAlertIsOpen(true);
         });
     };
@@ -79,12 +79,12 @@ export default function Home() {
       if (!response.ok) {
         throw new Error('Failed to fetch content');
       }
-      const data = await response.text();
-      setContent(data);
+      const data = await response.json();
+      setContent(data.fileContent);
     } catch (error) {
       console.error(error);
-      setAlertMessage(`${error}`); 
-      setAlertType('Error'); 
+      setAlertMessage(`${error}`);
+      setAlertType('Error');
       setAlertIsOpen(true);
     }
   }
@@ -92,19 +92,19 @@ export default function Home() {
   const callSaveScriptAPI = async () => {
     try {
       if (content.length > 0){
+        const requestBody = JSON.stringify({ fileContent: content });
         await fetch('/api/script/save', {
           method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: content
+          headers: { 'Content-Type': 'application/json' },
+          body: requestBody
         });
       } else {
         throw new Error('Please type a script to save.')
       }
-
     } catch (error) {
       console.error(error);
-      setAlertMessage(`${error}`); 
-      setAlertType('Error'); 
+      setAlertMessage(`${error}`);
+      setAlertType('Error');
       setAlertIsOpen(true);
     }
   }
@@ -150,7 +150,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className={`flex-1 flex flex-col justify-center items-center ${bgColor}`} id="main">  
+      <main className={`flex-1 flex flex-col justify-center items-center ${bgColor}`} id="main">
         <div className="h-1/2 flex justify-between w-full">
 
           {/*EA*/}
