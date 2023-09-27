@@ -3,7 +3,6 @@
 import { useState, useEffect, ChangeEvent } from 'react'
 //import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
-import CodeEditor from '../components/CodeEditor'
 import AboutPopUp from '../components/AboutPopUp'
 
 const bgColor = "bg-slate-400"
@@ -152,12 +151,11 @@ export default function Home() {
         <div className="h-1/2 flex justify-between w-full">
 
           {/*EA*/}
-          <CodeEditor
-            content={inputText}
-            //wordCount = {wordCount}
-            handleInputChange={handleInputChange}
+          <TextArea
+            content = {inputText}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
+            handleInputChange = {handleInputChange}
           />
           <div className="flex flex-col justify-evenly p-4">
             <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={handleSendToServer}>Compile</button>
@@ -210,23 +208,26 @@ export default function Home() {
           </div>
 
           {/*TA*/}
-          <CodeEditor
-            content={outputText}
-            // wordCount = {wordCount}
-            handleInputChange={handleInputChange}
+          <TextArea
+            content = {outputText}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
-            fileName='Output.js'
+            fileName = 'Output.js'
+            handleInputChange={handleInputChange}
           />
         </div>
 
         {/*RA*/}
         <div className={`h-1/2 w-full p-4 ${bgColor}`}>
           <TextArea
+            content = ""
+            height = "h-full"
             backgroundColor = "bg-black"
             textColor = "text-white"
             setReadOnly = {true}
+            fileName = 'Output.js'
+            showInfo = {false}
           />
         </div>
       </main>
