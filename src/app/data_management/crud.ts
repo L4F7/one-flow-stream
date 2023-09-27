@@ -9,7 +9,6 @@ export async function openFile(id: number) {
         const jsonData = JSON.stringify({fileContent: data})
         return new Response(jsonData, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
-        console.error(error)
         return new Response('Error reading the file', { status: 500 });
     }
 }
@@ -23,7 +22,6 @@ export async function saveFile(request: Request) {
         await fsPromises.writeFile(filePath, content, 'utf-8');
         return new Response('File created successfully.', { status: 200 });
     } catch (error) {
-        console.error(error);
         return new Response('Error saving the file', { status: 500 });
     }
 }
@@ -36,15 +34,29 @@ export async function listFiles() {
         const jsonFiles = JSON.stringify(files);
         return new Response(jsonFiles, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
-        console.error(error)
         return new Response('Error reading the directory', { status: 500 });
     }
+}
+
+export async function openEvaluatedFile(){
+    const filePath = path.resolve(`./src/app/data/ra_script/ra_fake.txt`);
+
+    try {
+        const data = await fsPromises.readFile(filePath, 'utf8');
+        const jsonData = JSON.stringify({fileData: data})
+        return new Response(jsonData, { status: 200, headers: { 'Content-Type': 'application/json' } });
+
+    } catch (error) {
+        return new Response('Error reading the file', { status: 500 });
+    }
+
 }
 
 const crud = {
     openFile,
     saveFile,
-    listFiles
+    listFiles,
+    openEvaluatedFile
 };
 
 export default crud;
