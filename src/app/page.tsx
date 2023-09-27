@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect, ChangeEvent } from 'react'
-//import { useRouter } from 'next/navigation'
+import { useReducer, useEffect } from 'react'
 import TextArea from '../components/TextArea'
 import AboutPopUp from '../components/AboutPopUp'
 import AlertPopUp from '../components/AlertPopUp'
@@ -10,20 +9,93 @@ const bgColor = "bg-slate-400"
 
 export default function Home() {
 
-  //const router = useRouter()
-  const [alertIsOpen, setAlertIsOpen] = useState<boolean>(false)
-  const [alertMessage, setAlertMessage] = useState<string>('')
-  const [alertType, setAlertType] = useState<string>('')
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [aboutInfo, setAboutInfo] = useState<string[]>([])
-  const [outputText, setOutputText] = useState<string>('')
-  const [filenames, setFilenames] = useState([])
-  const [selectedFilename, setSelectedFilename] = useState('')
-  const [typedFilename, setTypedFilename] = useState('')
  // const [hashedFilename, sethashedFilename] = useState('')
-  const [showModal, setShowModal] = useState(false)
-  const [content, setContent] = useState<string>('');
-  const [raContent, raSetContent] = useState<string>('');
+
+  // Define the types of actions that can be dispatched
+  type ActionType =  
+  | "SET_ALERT_IS_OPEN"
+  | "SET_ALERT_MESSAGE"
+  | "SET_ALERT_TYPE"
+  | "SET_IS_OPEN"
+  | "SET_ABOUT_INFO"
+  | "SET_OUTPUT_TEXT"
+  | "SET_FILENAMES"
+  | "SET_SELECTED_FILENAME"
+  | "SET_TYPED_FILENAME"
+  | "SET_SHOW_MODAL"
+  | "SET_CONTENT"
+  | "RA_SET_CONTENT";
+
+  // Define the types of state that can be used in the reducer
+  interface State {
+    alertIsOpen: boolean;
+    alertMessage: string;
+    alertType: string;
+    isOpen: boolean;
+    aboutInfo: string[];
+    outputText: string;
+    filenames: string[];
+    selectedFilename: string;
+    typedFilename: string;
+    showModal: boolean;
+    content: string;
+    raContent: string;
+  }
+
+  // Define the initial state of the reducer
+  const initialState: State = {
+    alertIsOpen: false,
+    alertMessage: '',
+    alertType: '',
+    isOpen: false,
+    aboutInfo: [],
+    outputText: '',
+    filenames: [],
+    selectedFilename: '',
+    typedFilename: '',
+    showModal: false,
+    content: '',
+    raContent: '',
+  };
+
+  interface Action {
+    type: ActionType;
+    value: any;
+  }
+
+  // Define the reducer
+  const reducer = (state: State, { type, value }: Action): State => {
+    switch (type) {
+      case "SET_ALERT_IS_OPEN":
+        return { ...state, alertIsOpen: value };
+      case "SET_ALERT_MESSAGE":
+        return { ...state, alertMessage: value };
+      case "SET_ALERT_TYPE":
+        return { ...state, alertType: value };
+      case "SET_IS_OPEN":
+        return { ...state, isOpen: value };
+      case "SET_ABOUT_INFO":
+        return { ...state, aboutInfo: value };
+      case "SET_OUTPUT_TEXT":
+        return { ...state, outputText: value };
+      case "SET_FILENAMES":
+        return { ...state, filenames: value };
+      case "SET_SELECTED_FILENAME":
+        return { ...state, selectedFilename: value };
+      case "SET_TYPED_FILENAME":
+        return { ...state, typedFilename: value };
+      case "SET_SHOW_MODAL":
+        return { ...state, showModal: value };
+      case "SET_CONTENT":
+        return { ...state, content: value };
+      case "RA_SET_CONTENT":
+        return { ...state, raContent: value };
+      default:
+        return state;
+    }
+  };
+
+  const [ { alertIsOpen, alertMessage, alertType, isOpen, aboutInfo, outputText, filenames, selectedFilename, typedFilename, showModal, content, raContent }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
 
@@ -33,22 +105,22 @@ export default function Home() {
           throw new Error('Error calling About API');
         }
         return response.json()})
-      .then((data) => setAboutInfo(JSON.parse(data.about)))
+      .then((data) => dispatch({ type: "SET_ABOUT_INFO", value: JSON.parse(data.about) }))
       .catch((error) => console.error('Error fetching about Info:', error));
   }, []);
 
   // About functions
   const openAboutPopup = () => {
-    setIsOpen(true);
+    dispatch({ type: "SET_IS_OPEN", value: true });
   };
 
   const closeAboutPopup = () => {
-    setIsOpen(false);
+    dispatch({ type: "SET_IS_OPEN", value: false });
   };
 
   // Alert Dialog functions
   const closeAlertPopup = () => {
-    setAlertIsOpen(false);
+    dispatch({ type: "SET_ALERT_IS_OPEN", value: false });
   };
 
   //API to call /Compile service from server using POST
@@ -66,11 +138,11 @@ export default function Home() {
           }
           return response.json()
         })
-        .then((data) => {setOutputText(data.result);})
+        .then((data) => {dispatch({ type: "SET_OUTPUT_TEXT", value: data.result })})
         .catch((error) => {
-            setAlertMessage(`${error}`);
-            setAlertType('Error');
-            setAlertIsOpen(true);
+          dispatch({ type: "SET_ALERT_MESSAGE", value: `${error}` });
+          dispatch({ type: "SET_ALERT_TYPE", value: 'Error' });
+          dispatch({ type: "SET_ALERT_IS_OPEN", value: true });
         });
     };
 
@@ -90,12 +162,12 @@ export default function Home() {
         }
         return response.json()
       })
-      .then((data) => {raSetContent(data.result); console.log(`RESULT: ${data.result}`)})
+      .then((data) => {dispatch({ type: "RA_SET_CONTENT", value: data.fileData })})
       .catch((error) => {
-          raSetContent(error.message);
-          setAlertMessage(`${error}`);
-          setAlertType('Error');
-          setAlertIsOpen(true);
+        dispatch({ type: "RA_SET_CONTENT", value: error.message })
+        dispatch({ type: "SET_ALERT_MESSAGE", value: `${error}` });
+        dispatch({ type: "SET_ALERT_TYPE", value: 'Error' });
+        dispatch({ type: "SET_ALERT_IS_OPEN", value: true });
       });
   }
 
@@ -108,13 +180,13 @@ export default function Home() {
         throw new Error('Failed to fetch content');
       }
       const data = await response.json();
-      setContent(data.fileContent);
-      setTypedFilename(filename);
+      dispatch({ type: "SET_CONTENT", value: data.fileContent });
+      dispatch({ type: "SET_TYPED_FILENAME", value: filename });
+      dispatch({ type: "SET_OUTPUT_TEXT", value: "" });
     } catch (error) {
-      console.error(error);
-      setAlertMessage(`${error}`);
-      setAlertType('Error');
-      setAlertIsOpen(true);
+      dispatch({ type: "SET_ALERT_MESSAGE", value: `${error}` });
+      dispatch({ type: "SET_ALERT_TYPE", value: 'Error' });
+      dispatch({ type: "SET_ALERT_IS_OPEN", value: true });
     }
   }
 
@@ -135,10 +207,9 @@ export default function Home() {
         throw new Error('Please type a script to save.');
       }
     } catch (error) {
-      console.error(error);
-      setAlertMessage(`${error}`);
-      setAlertType('Error');
-      setAlertIsOpen(true);
+      dispatch({ type: "SET_ALERT_MESSAGE", value: `${error}` });
+      dispatch({ type: "SET_ALERT_TYPE", value: 'Error' });
+      dispatch({ type: "SET_ALERT_IS_OPEN", value: true });
     }
   }
 
@@ -149,8 +220,8 @@ export default function Home() {
         throw new Error('Failed to fetch filenames');
       }
       const data = await response.json();
-      setFilenames(data);
-      setShowModal(true);
+      dispatch({ type: "SET_FILENAMES", value: data });
+      dispatch({ type: "SET_SHOW_MODAL", value: true });
     } catch (error) {
       console.error(error);
     }
@@ -175,12 +246,12 @@ export default function Home() {
   }*/
 
   const handleTypedFilenameChange = (value: string) => {
-    setTypedFilename(value);
+    dispatch({ type: "SET_TYPED_FILENAME", value: value });
     //callHashNameScriptAPI();
   }
 
-  const handleFilenameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFilename(event.target.value);
+  const handleFilenameChange = ({ target: { value } }: { target: { value: string } }) => {
+    dispatch({ type: "SET_SELECTED_FILENAME", value: value});
   };
 
 
@@ -211,11 +282,9 @@ export default function Home() {
           {/*EA*/}
           <TextArea
             content={content}
-            setContent={setContent}
+            setContent={(newContent: String) => dispatch({ type: "SET_CONTENT", value: newContent })}
             fileName={typedFilename}
             setTypedFilename={handleTypedFilenameChange}
-            //wordCount = {wordCount}
-            //handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
           />
@@ -254,12 +323,12 @@ export default function Home() {
 
                         onClick={() => {
                           callOpenScriptAPI();
-                          setShowModal(false);
+                          dispatch({ type: "SET_SHOW_MODAL", value: false });
                         }}
                       >
                         Open File
                       </button>
-                      <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModal(false)}>
+                      <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" onClick={() => dispatch({ type: "SET_SHOW_MODAL", value: false })}>
                         Close
                       </button>
                     </div>
@@ -272,8 +341,7 @@ export default function Home() {
           {/*TA*/}
           <TextArea
             content={outputText}
-            setContent={setContent}
-            //handleInputChange={handleInputChange}
+            setContent={(newContent: String) => dispatch({ type: "SET_CONTENT", value: newContent })}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
@@ -285,8 +353,7 @@ export default function Home() {
         <div className={`h-1/2 w-full p-4 ${bgColor}`}>
           <TextArea
             content={raContent}
-            setContent={setContent}
-            //handleInputChange={handleInputChange}
+            setContent={(newContent: String) => dispatch({ type: "SET_CONTENT", value: newContent })}
             height={"h-full"}
             backgroundColor = "bg-black"
             textColor = "text-white"
