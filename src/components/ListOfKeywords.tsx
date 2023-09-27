@@ -9,6 +9,7 @@ const ListOfKeywords : React.FC<ListOfKeywordsProps> = ({ keywords, onSelect }) 
   keywords = ["Suggestions", ...keywords];
   return (
     <select 
+      className="text-black"
        value={keywords[0]}
        onChange={e => {return onSelect(e.target.value)}}
     >

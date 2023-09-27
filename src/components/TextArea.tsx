@@ -29,6 +29,7 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
   const [wordCount, setWordCount] = useState<number>(0);
   const [shouldListAppear, setShouldListAppear] = useState<boolean>(false);
   const [candidateKeywords, setCandidateKeywords] = useState<string[]>([]);
+  const [cursorPosition, setCursorPosition] = useState<number[]>([0, 0]);
 
   // Handle keywords when words are typed in, a selector will show up automatically suggesting words from keywords list
   const handleChange = (e : ChangeEvent<HTMLTextAreaElement>) => {
@@ -119,29 +120,28 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
 
   }, []);
 
-  // Show the word count, file name, and number of lines if enabled
-  const showTextAreaInfo = () => (
-    showInfo && (
-        <TextAreaInfo
-          wordCount = {wordCount}
-          backgroundColor = {backgroundColor}
-          textColor = {textColor}
-          fileName = {fileName}
-        />
-      )
-  );
 
-  // Show the line numbers if enabled
-  const showNumbersArea = () => (
-    showInfo && (
-      <LineCounterArea 
-        content={setReadOnly ? content : text}
-        lineCounterAreaRef={lineCounterAreaRef} 
-      />
-    )
-  );
+  // Calculate the cursor position
+  const calculateCursorPosition = (text: string, selectionStart: number) => {
+    const textLines = text.slice(0, selectionStart).split('\n');
+    const currentLineNumber = textLines.length;
+    const currentColumnIndex = textLines[currentLineNumber - 1].length;
+    return [currentLineNumber, currentColumnIndex + 1];
+  };
+
+  // Get the line number and column index of the cursor
+  // Reference: http://web.archive.org/web/20090221140237/http://www.dedestruct.com/2008/03/22/howto-cross-browser-cursor-position-in-textareas/
+  const setLineNumberAndColumnNumber = () => {
+    if (textareaRef.current) {
+      const textAreaValue = textareaRef.current.value;
+      const currentPosition = calculateCursorPosition(textAreaValue, textareaRef.current.selectionStart);
+      setCursorPosition(currentPosition);
+    }
+  };
+
+  // Determine if the text should wrap or not
+  const shouldWrap = () => setReadOnly ? "whitespace-pre-wrap" : "whitespace-nowrap";
   
-
   return (
     <div className={`${height} ${width} p-4 ${bgColor}`}>
       {shouldListAppear && candidateKeywords.length > 0 && (
@@ -152,20 +152,35 @@ const TextArea: React.FC<TextAreaProps> = ({content, setContent, height = "", wi
       )}
       <div className = "flex" style = {{ height: "95%", maxHeight: "800px" }}>
 
-        {showNumbersArea()} 
+        {showInfo && (
+          <LineCounterArea 
+            content={setReadOnly ? content : text}
+            lineCounterAreaRef={lineCounterAreaRef} 
+          />
+        )} 
 
         <textarea
           ref={textareaRef}
-          className={`h-auto max-h-full flex-1 p-2 border border-gray-200 text-black resize-none overflow-y-scroll cursor-auto ${textColor} ${backgroundColor}`}
-          //style={{ whiteSpace: 'nowrap' }}
+          className={`h-auto max-h-full flex-1 p-2 border border-gray-200 text-black resize-none overflow-y-scroll cursor-auto ${textColor} ${backgroundColor} ${shouldWrap()}`}
           value={content}
           onKeyDown={handleOnKeyDown}
           onChange={handleChange}
           readOnly={setReadOnly}
+          onKeyUp={setLineNumberAndColumnNumber}
+          onMouseUp={setLineNumberAndColumnNumber}
         />
       </div>
 
-      {showTextAreaInfo()}
+      {showInfo && (
+        <TextAreaInfo
+          wordCount = {wordCount}
+          backgroundColor = {backgroundColor}
+          textColor = {textColor}
+          fileName = {fileName}
+          cursorPosition = {cursorPosition}
+          textAreaReadOnly = {setReadOnly}
+        />
+      )}
 
     </div>
   );
