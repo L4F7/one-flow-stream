@@ -1,6 +1,6 @@
-import crud from '../../../data_management/crud';
+import { listFiles } from '../../../data_management/crud';
 
 export async function GET(request: Request) {
-    const response = await crud.listFiles();
+    const response = await listFiles();
     return response;
 }
