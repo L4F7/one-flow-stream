@@ -4,7 +4,7 @@ Pasos para la ejecución la aplicación:
 
 1. Clonar la rama principal ("Master") y descargar el código por medio del comando: 
 
-	- git clone enlace del proy.
+	- git clone https://github.com/L4F7/one-flow-stream.git
 
 2. Abrir una terminal y navegar a la carpeta donde se descargó en el proyecto.
 
