@@ -2,6 +2,7 @@ import fsPromises from 'fs/promises';
 import { createHash } from 'crypto';
 import path from 'path';
 
+// This function is used to open the file
 export async function openFile(id: string) {
     const filePath = path.resolve(`./src/app/data/scripts/${id}.ofs`);
 
@@ -14,6 +15,7 @@ export async function openFile(id: string) {
     }
 }
 
+// This function is used to save the file
 export async function saveFile(request: Request, id: string) {
     try {
         const jsonData = await request.json();
@@ -27,6 +29,7 @@ export async function saveFile(request: Request, id: string) {
     }
 }
 
+// This function is used to list all the files in the directory
 export async function listFiles() {
     const directoryPath = path.resolve(`./src/app/data/scripts`);
 
@@ -39,6 +42,7 @@ export async function listFiles() {
     }
 }
 
+// This function is used to hash the file name
 export async function hashFileName(request: Request) {
     try {
         const jsonData = await request.json();
@@ -53,6 +57,7 @@ export async function hashFileName(request: Request) {
     }
 }
 
+// This function is used to open the file that contains the evaluated script
 export async function openEvaluatedFile(){
     const filePath = path.resolve(`./src/app/data/ra_script/ra_fake.txt`);
 
@@ -67,6 +72,7 @@ export async function openEvaluatedFile(){
 
 }
 
+// This object is used to export all the functions
 const crud = {
     openFile,
     saveFile,

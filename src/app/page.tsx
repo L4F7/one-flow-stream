@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, ChangeEvent } from 'react'
-//import { useRouter } from 'next/navigation'
 import TextArea from '../components/TextArea'
 import AboutPopUp from '../components/AboutPopUp'
 import AlertPopUp from '../components/AlertPopUp'
@@ -10,7 +9,6 @@ const bgColor = "bg-slate-400"
 
 export default function Home() {
 
-  //const router = useRouter()
   const [alertIsOpen, setAlertIsOpen] = useState<boolean>(false)
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [alertType, setAlertType] = useState<string>('')
@@ -214,8 +212,6 @@ export default function Home() {
             setContent={setContent}
             fileName={typedFilename}
             setTypedFilename={handleTypedFilenameChange}
-            //wordCount = {wordCount}
-            //handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
           />
@@ -273,7 +269,6 @@ export default function Home() {
           <TextArea
             content={outputText}
             setContent={setContent}
-            //handleInputChange={handleInputChange}
             width = "w-1/2"
             backgroundColor = "bg-neutral-100"
             setReadOnly = {true}
@@ -286,7 +281,6 @@ export default function Home() {
           <TextArea
             content={raContent}
             setContent={setContent}
-            //handleInputChange={handleInputChange}
             height={"h-full"}
             backgroundColor = "bg-black"
             textColor = "text-white"
