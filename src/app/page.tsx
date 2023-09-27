@@ -80,15 +80,15 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: "TA Content",
+      body: outputText,
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Unable to evaluate, please type a script before continue');
+          throw new Error('Unable to evaluate, please type a script in EA and compile it before continue');
         }
         return response.json()
       })
-      .then((data) => {raSetContent(data.fileData)})
+      .then((data) => {raSetContent(data.result); console.log(`RESULT: ${data.result}`)})
       .catch((error) => {
           setAlertMessage(`${error}`);
           setAlertType('Error');

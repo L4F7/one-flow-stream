@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { readFile } from 'fs/promises';
+import fsPromises from 'fs/promises';
 const path = require('path');
 
 export async function POST(request : Request){
@@ -11,6 +11,8 @@ export async function POST(request : Request){
 
         const timestampedText = `Echo from server: at ${new Date().toISOString()}: \n${content}`;
         console.log(timestampedText)
+        const filePathSaveOutput = `./src/app/api/script/Output.js`;
+        await fsPromises.writeFile(filePathSaveOutput, content, 'utf-8');
         return NextResponse.json({message: 'File compiled successfully.', result : timestampedText}, { status: 200 })
     } catch (error) {
         console.error('ERROR en try: '+error);
