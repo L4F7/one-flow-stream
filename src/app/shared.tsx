@@ -1,1 +1,0 @@
-export const bgColor = "bg-slate-400"

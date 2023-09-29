@@ -1,41 +1,40 @@
 [
     {
-        "Proyecto" : {
-            "Nombre" : "Entorno Prototipo para el Lenguaje OneFlowStream (OFS)",
-            "Integrantes" : [
+        "Proyecto": {
+            "Nombre": "Entorno Prototipo para el Lenguaje OneFlowStream (OFS)",
+            "Integrantes": [
                 {
-                    "Nombre" : "Kenneth Alfaro Barboza",
-                    "Identificacion" : "402240444"
+                    "Nombre": "Kenneth Alfaro Barboza",
+                    "Identificacion": "402240444"
                 },
                 {
-                    "Nombre" : "Luis Fuentes Fuentes",
-                    "Identificacion" : "117590509"
+                    "Nombre": "Luis Fuentes Fuentes",
+                    "Identificacion": "117590509"
                 },
                 {
-                    "Nombre" : "Luis Eduardo Restrepo Veintemilla",
-                    "Identificacion" : "A00119566"
+                    "Nombre": "Luis Eduardo Restrepo Veintemilla",
+                    "Identificacion": "A00119566"
                 },
                 {
-                    "Nombre" : "Maria Angelica Robles Azofeifa",
-                    "Identificacion" : "402500497"
+                    "Nombre": "Maria Angelica Robles Azofeifa",
+                    "Identificacion": "402500497"
                 },
                 {
-                    "Nombre" : "Royer Zuñiga Villareal",
-                    "Identificacion" : "118320376"
+                    "Nombre": "Royer Zuñiga Villareal",
+                    "Identificacion": "118320376"
                 }
             ]
         }
     },
     {
-        "Curso" :
-            {
-            "Nombre" : "Paradigmas de Programación",
-            "Codigo" : "EIF400",
-            "Horario" : "3PM",
-            "Semestre" : "II",
-            "Año" : "2023",
-            "Escuela" : "Escuela de Informática",
-            "Universidad" : "Universidad Nacional"
-            }
+        "Curso": {
+            "Nombre": "Paradigmas de Programación",
+            "Codigo": "EIF400",
+            "Horario": "3PM",
+            "Semestre": "II",
+            "Año": "2023",
+            "Escuela": "Escuela de Informática",
+            "Universidad": "Universidad Nacional"
+        }
     }
 ]

@@ -1,4 +1,12 @@
 Proyecto OneFlowStream (OFS)
+    *Poner descripción*
+
+Desarrolladores:
+    - Kenneth Alfaro Barboza
+    - Luis Fuentes Fuentes
+    - Luis Eduardo Restrepo Veintemilla
+    - Maria Angelica Robles Azofeifa
+    - Royer Zuñiga Villareal
 
 Pasos para la ejecución la aplicación:
 
