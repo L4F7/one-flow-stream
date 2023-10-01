@@ -10,7 +10,7 @@
 
 import { NextResponse } from 'next/server';
 import { readFile, writeFile} from 'fs/promises';
-import { openEvaluatedFile } from '../../data_management/crud';
+import { openEvaluatedFile } from '../../../data/data_management/crud';
 import { resolve } from 'path';
 
 export async function POST(request: Request) {

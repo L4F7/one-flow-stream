@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import { listFiles } from '../../../data_management/crud';
+import { listFiles } from '../../../../data/data_management/crud';
 
 export async function GET(request: Request) {
     const response = await listFiles();

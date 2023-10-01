@@ -9,7 +9,7 @@
  */
 
 import PopUp from 'react-modal';
-import { AboutInfo } from '../app/shared/types';  // Adjust the path accordingly
+import { AboutInfo } from '../utils/types';
 
 PopUp.setAppElement('#main');
 
@@ -18,6 +18,7 @@ const aboutDialogStyle: PopUp.Styles = {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     content: {
+        height: 'fit-content',
         width: '600px',
         margin: 'auto',
         padding: '20px',

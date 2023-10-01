@@ -10,11 +10,12 @@
 
 'use client';
 
-import { useReducer, useEffect, useRef, KeyboardEvent } from 'react';
-import { bgColor } from '../app/shared/constants';
+import { useReducer, useEffect, useRef, KeyboardEvent, use } from 'react';
 import TextAreaInfo from './textAreaInfo';
 import LineCounterArea from './lineCounterArea';
 import ListOfKeywords from './listOfKeywords';
+
+const bgColor = 'bg-slate-400';
 
 interface TextAreaProps {
     content: string;
@@ -115,23 +116,25 @@ const TextArea: React.FC<TextAreaProps> = ({
     }: {
         target: { value: string };
     }) => {
-        const newText: string = value;
+        const textAreaText: string = value;
 
-        dispatch({ type: 'SET_TEXT', value: newText });
-        setContent(newText);
+        dispatch({ type: 'SET_TEXT', value: textAreaText });
+        setContent(textAreaText);
 
-        if (newText.length == 0 || candidateKeywords.length == 0)
+        if (textAreaText.length === 0 || candidateKeywords.length == 0)
             dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: false });
 
-        const words: string[] = text != null ? newText.split(/\s+/) : [];
-        const lastWord: string = words[words.length - 1];
+        const selectionStart = textareaRef.current?.selectionStart;
+        const textLines = textAreaText.slice(0, selectionStart).split('\n');
+        const lastWord = textLines[textLines.length - 1].split(' ').pop();
+
         const filteredKeywords = keywords.filter((keyword: string) =>
-            keyword.startsWith(lastWord)
+            keyword.startsWith(lastWord || '')
         );
 
         dispatch({ type: 'SET_CANDIDATE_KEYWORDS', value: filteredKeywords });
 
-        if (newText.length === 1 || filteredKeywords.length > 0) {
+        if (lastWord && lastWord.length > 0 && filteredKeywords.length > 0) {
             dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: true });
         }
     };
@@ -142,12 +145,26 @@ const TextArea: React.FC<TextAreaProps> = ({
         }
     };
 
-    // Handle function when keyword is selected, it will replace last word of the text with the selection
+    // Handle function when keyword is selected, it will replace the last word typed with the selected keyword
     const handleKeywordSelect = (keyword: string) => {
-        const replacedText = text.replace(/\S+$/, keyword); // This line takes the last word from the TextArea and replaces it with the Keyword selected
+        const selectionStart = textareaRef.current?.selectionStart;
 
-        setContent(replacedText);
-        dispatch({ type: 'SET_TEXT', value: replacedText });
+        const textLines = text.slice(0, selectionStart).split('\n');
+        const textLinesWithNewLastWord = textLines.map((line, index) => {
+            if (index === textLines.length - 1) {
+                const words = line.split(' ');
+                words.pop();
+                words.push(keyword);
+                return words.join(' ');
+            }
+            return line;
+        });
+
+        const replacedText = textLinesWithNewLastWord.join('\n');
+        const fullText = replacedText + text.slice(selectionStart || 0);
+
+        setContent(fullText);
+        dispatch({ type: 'SET_TEXT', value: fullText });
         dispatch({ type: 'SET_SHOULD_LIST_APPEAR', value: false });
     };
 
@@ -156,6 +173,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         // If the text is empty, set the word count to 0
         if (validationText === '') {
             dispatch({ type: 'SET_WORD_COUNT', value: 0 });
+            dispatch({ type: 'SET_TEXT', value: '' });
             return;
         }
 
@@ -230,13 +248,6 @@ const TextArea: React.FC<TextAreaProps> = ({
 
     return (
         <div className={`${height} ${width} p-4 ${bgColor}`}>
-            {shouldListAppear &&
-                candidateKeywords.length > 0 && ( // If shouldListAppear is true, show the ListOfKeywords
-                    <ListOfKeywords
-                        keywords={candidateKeywords}
-                        onSelect={handleKeywordSelect}
-                    />
-                )}
             <div className="flex" style={{ height: '95%', maxHeight: '800px' }}>
                 {showInfo && ( // If showInfo is true, show the LineCounterArea
                     <LineCounterArea
@@ -256,18 +267,26 @@ const TextArea: React.FC<TextAreaProps> = ({
                     onMouseUp={setLineNumberAndColumnNumber}
                 />
             </div>
-
-            {showInfo && ( // If showInfo is true, show the TextAreaInfo
-                <TextAreaInfo
-                    setTypedFilename={setTypedFilename}
-                    wordCount={wordCount}
-                    backgroundColor={backgroundColor}
-                    textColor={textColor}
-                    fileName={fileName}
-                    cursorPosition={cursorPosition}
-                    textAreaReadOnly={false}
-                />
-            )}
+            <div className="flex">
+                {showInfo && ( // If showInfo is true, show the TextAreaInfo
+                    <TextAreaInfo
+                        setTypedFilename={setTypedFilename}
+                        wordCount={wordCount}
+                        backgroundColor={backgroundColor}
+                        textColor={textColor}
+                        fileName={fileName}
+                        cursorPosition={cursorPosition}
+                        textAreaReadOnly={false}
+                    />
+                )}
+                {shouldListAppear &&
+                    candidateKeywords.length > 0 && ( // If shouldListAppear is true, show the ListOfKeywords
+                        <ListOfKeywords
+                            keywords={candidateKeywords}
+                            onSelect={handleKeywordSelect}
+                        />
+                    )}
+            </div>
         </div>
     );
 };

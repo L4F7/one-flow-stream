@@ -11,10 +11,12 @@
 'use client';
 
 import { useReducer, useEffect } from 'react';
-import { bgColor } from './shared/constants';
+import { AboutInfo } from '../utils/types';
 import TextArea from '../components/textArea';
 import AboutPopUp from '../components/aboutPopUp';
 import AlertPopUp from '../components/alertPopUp';
+
+const bgColor = 'bg-slate-400';
 
 export default function Home() {
     // const [hashedFilename, sethashedFilename] = useState('')
@@ -40,7 +42,7 @@ export default function Home() {
         alertMessage: string;
         alertType: string;
         isOpen: boolean;
-        aboutInfo: any;
+        aboutInfo: AboutInfo[];
         outputText: string;
         filenames: string[];
         selectedFilename: string;
@@ -298,6 +300,12 @@ export default function Home() {
         dispatch({ type: 'SET_SELECTED_FILENAME', value: value });
     };
 
+    const clearContent = () => {
+        dispatch({ type: 'SET_CONTENT', value: '' });
+        dispatch({ type: 'SET_OUTPUT_TEXT', value: '' });
+        dispatch({ type: 'RA_SET_CONTENT', value: '' });
+    };
+
     return (
         <div className="h-screen flex flex-col">
             {/* Alert PopUp Section */}
@@ -357,28 +365,31 @@ export default function Home() {
                     />
                     <div className="flex flex-col justify-evenly p-4">
                         <button
-                            className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
+                            className="h-16 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
                             onClick={handleSendToServer}
                         >
                             Compile
                         </button>
                         <button
-                            className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
+                            className="h-16 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
                             onClick={callEvaluateScript}
                         >
                             Evaluate
                         </button>
-                        <button className="h-1/5 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
+                        <button
+                            className="h-16 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
+                            onClick={clearContent}
+                        >
                             Clear
                         </button>
                         <button
-                            className="h-1/6 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
+                            className="h-16 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
                             onClick={callListScriptAPI}
                         >
                             Open
                         </button>
                         <button
-                            className="h-1/6 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
+                            className="h-16 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
                             onClick={callSaveScriptAPI}
                         >
                             Save

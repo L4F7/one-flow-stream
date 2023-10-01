@@ -15,7 +15,7 @@ import { resolve } from 'path';
 // This function is used to open the file
 export async function openFile(id: string) {
     try {
-        const filePath = resolve(`./src/app/data/scripts/${id}.ofs`);
+        const filePath = resolve(`./src/data/scripts/${id}.ofs`);
         const data = await readFile(filePath, 'utf8');
         const jsonData = JSON.stringify({ fileContent: data });
         return new Response(jsonData, {
@@ -32,7 +32,7 @@ export async function saveFile(request: Request, id: string) {
     try {
         const jsonData = await request.json();
         const content = jsonData.fileContent;
-        const filePath = resolve(`./src/app/data/scripts/${id}.ofs`);
+        const filePath = resolve(`./src/data/scripts/${id}.ofs`);
 
         await writeFile(filePath, content, 'utf-8');
         return new Response('File created successfully.', { status: 200 });
@@ -44,11 +44,12 @@ export async function saveFile(request: Request, id: string) {
 // This function is used to list all the files in the directory
 export async function listFiles() {
     try {
-        const directoryPath = resolve(`./src/app/data/scripts`);
+        const directoryPath = resolve(`./src/data/scripts`);
         const files = (await readdir(directoryPath, 'utf8')).filter(
             (file) => file.endsWith('.ofs')
         );
         const jsonFiles = JSON.stringify(files);
+        console.log
         return new Response(jsonFiles, {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
@@ -81,7 +82,7 @@ export async function hashFileName(request: Request) {
 // This function is used to open the file that contains the evaluated script
 export async function openEvaluatedFile() {
     try {
-        const filePath = resolve(`./src/app/data/ra_script/ra_fake.txt`);
+        const filePath = resolve(`./src/data/ra_script/ra_fake.txt`);
         const data = await readFile(filePath, 'utf8');
         const jsonData = JSON.stringify({ fileData: data });
         return new Response(jsonData, {
@@ -95,7 +96,7 @@ export async function openEvaluatedFile() {
 
 export async function readAbout() {
     try {
-        const filePath = resolve(`./src/app/data/about.json`);
+        const filePath = resolve(`./src/data/about.json`);
         const file = await readFile(filePath, 'utf-8');
         const jsonFile = JSON.stringify({
             about: file,

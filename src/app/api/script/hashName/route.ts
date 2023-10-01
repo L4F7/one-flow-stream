@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import { hashFileName } from '../../../data_management/crud';
+import { hashFileName } from '../../../../data/data_management/crud';
 
 export async function POST(request: Request) {
     const response = await hashFileName(request);

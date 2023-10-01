@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import { openFile } from '../../../data_management/crud';
+import { openFile } from '../../../../data/data_management/crud';
 
 export async function GET(
     request: Request,

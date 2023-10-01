@@ -14,7 +14,7 @@ const path = require('path');
 
 export async function GET() {
     try {
-        const filePath = path.resolve(`./src/app/data/keywords.json`);
+        const filePath = path.resolve(`./src/data/keywords.json`);
         const file = await readFile(filePath, 'utf-8');
         return NextResponse.json(
             { message: 'Keywords file loaded successfully.', keywords: file },

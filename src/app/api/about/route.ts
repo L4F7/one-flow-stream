@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import { readAbout } from '../../data_management/crud';
+import { readAbout } from '../../../data/data_management/crud';
 
 export async function GET(request: Request) {
     const response = await readAbout();
