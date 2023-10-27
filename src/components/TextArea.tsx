@@ -11,9 +11,9 @@
 'use client';
 
 import { useReducer, useEffect, useRef, KeyboardEvent, use } from 'react';
-import TextAreaInfo from './textAreaInfo';
-import LineCounterArea from './lineCounterArea';
-import ListOfKeywords from './listOfKeywords';
+import TextAreaInfo from './TextAreaInfo';
+import LineCounterArea from './LineCounterArea';
+import ListOfKeywords from './ListOfKeywords';
 
 const bgColor = 'bg-slate-400';
 

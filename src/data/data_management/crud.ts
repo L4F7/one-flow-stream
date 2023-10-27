@@ -11,51 +11,83 @@
 import { readFile, readdir, writeFile } from 'fs/promises';
 import { createHash } from 'crypto';
 import { resolve } from 'path';
+import File from '@/models/file';
+import connect from '@/utils/db';
+import { NextResponse } from 'next/server';
 
 // This function is used to open the file
 export async function openFile(id: string) {
+
     try {
-        const filePath = resolve(`./src/data/scripts/${id}.ofs`);
-        const data = await readFile(filePath, 'utf8');
-        const jsonData = JSON.stringify({ fileContent: data });
-        return new Response(jsonData, {
+        await connect();
+        const file = await File.findOne({ filename: id });
+        const jsonFile = JSON.stringify(file);
+        return new Response(jsonFile, {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
-    } catch (error) {
-        return new Response('Error reading the file', { status: 500 });
+
+    } catch (error: any) {
+        return new NextResponse(error, {
+            status: 500,
+        });
     }
 }
 
 // This function is used to save the file
-export async function saveFile(request: Request, id: string) {
+export async function saveFile(request: Request, fileName: string) {
     try {
-        const jsonData = await request.json();
-        const content = jsonData.fileContent;
-        const filePath = resolve(`./src/data/scripts/${id}.ofs`);
 
-        await writeFile(filePath, content, 'utf-8');
-        return new Response('File created successfully.', { status: 200 });
-    } catch (error) {
-        return new Response('Error saving the file', { status: 500 });
+        await connect();
+        const { fileContent } = await request.json();
+        const existingFile = await File.findOne({ filename: fileName });
+
+        // If the file already exists, it will be updated
+        if (existingFile) {
+            existingFile.fileData = fileContent;
+            await existingFile.save();
+            return new NextResponse('File updated successfully', {
+                status: 200,
+            });
+        }
+
+        // If the file does not exist, it will be created
+        const file = new File({
+            filename: fileName,
+            extension: 'ofs',
+            fileData: fileContent,
+        });
+
+        await file.save();
+
+        return new NextResponse('File saved successfully', {
+            status: 200,
+        });
+
+    } catch (error: any) {
+        return new NextResponse(error, {
+            status: 500,
+        });
     }
 }
 
 // This function is used to list all the files in the directory
 export async function listFiles() {
     try {
-        const directoryPath = resolve(`./src/data/scripts`);
-        const files = (await readdir(directoryPath, 'utf8')).filter(
-            (file) => file.endsWith('.ofs')
-        );
-        const jsonFiles = JSON.stringify(files);
-        console.log
-        return new Response(jsonFiles, {
+
+        await connect();
+        const files = await File.find();
+        const filesNames = files.map((file) => file.filename);
+        const jsonFilesNames = JSON.stringify(filesNames);
+        return new Response(jsonFilesNames, {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
-    } catch (error) {
-        return new Response('Error reading the directory', { status: 500 });
+
+    } catch (error: any) {
+        return new NextResponse(error, {
+            status: 500,
+        });
     }
 }
 

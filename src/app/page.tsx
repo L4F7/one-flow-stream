@@ -11,10 +11,10 @@
 'use client';
 
 import { useReducer, useEffect } from 'react';
-import { AboutInfo } from '../utils/types';
-import TextArea from '../components/textArea';
-import AboutPopUp from '../components/aboutPopUp';
-import AlertPopUp from '../components/alertPopUp';
+import { AboutInfo } from '@/utils/types';
+import TextArea from '@/components/TextArea';
+import AboutPopUp from '@/components/AboutPopUp';
+import AlertPopUp from '@/components/AlertPopUp';
 
 const bgColor = 'bg-slate-400';
 
@@ -220,7 +220,8 @@ export default function Home() {
                 throw new Error('Failed to fetch content');
             }
             const data = await response.json();
-            dispatch({ type: 'SET_CONTENT', value: data.fileContent });
+            const fileData = Buffer.from(data.fileData).toString('utf8');
+            dispatch({ type: 'SET_CONTENT', value: fileData });
             dispatch({ type: 'SET_TYPED_FILENAME', value: filename });
             dispatch({ type: 'SET_OUTPUT_TEXT', value: '' });
         } catch (error) {
@@ -235,7 +236,7 @@ export default function Home() {
             if (content.length > 0) {
                 if (typedFilename !== '') {
                     const requestBody = JSON.stringify({
-                        fileContent: content,
+                        fileContent:  Buffer.from(content, 'utf8'),
                     });
                     await fetch(`/api/script/save/${typedFilename}`, {
                         method: 'POST',
