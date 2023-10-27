@@ -123,8 +123,9 @@ export default function Home() {
         dispatch,
     ] = useReducer(reducer, initialState);
 
-    useEffect(() => {
-        fetch(`api/about`)
+    // About functions
+    const openAboutPopup = () => {
+        fetch(`api/about`, { cache: 'no-store' })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Error calling About API');
@@ -140,10 +141,6 @@ export default function Home() {
             .catch((error) =>
                 console.error('Error fetching about Info:', error)
             );
-    }, []);
-
-    // About functions
-    const openAboutPopup = () => {
         dispatch({ type: 'SET_IS_OPEN', value: true });
     };
 
@@ -236,7 +233,7 @@ export default function Home() {
             if (content.length > 0) {
                 if (typedFilename !== '') {
                     const requestBody = JSON.stringify({
-                        fileContent:  Buffer.from(content, 'utf8'),
+                        fileContent: Buffer.from(content, 'utf8'),
                     });
                     await fetch(`/api/script/save/${typedFilename}`, {
                         method: 'POST',
@@ -258,7 +255,9 @@ export default function Home() {
 
     const callListScriptAPI = async () => {
         try {
-            const response = await fetch('/api/script/list');
+            const response = await fetch('/api/script/list', {
+                cache: 'no-store',
+            });
             if (!response.ok) {
                 throw new Error('Failed to fetch filenames');
             }

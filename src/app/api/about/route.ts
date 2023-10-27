@@ -10,7 +10,9 @@
 
 import { readAbout } from '../../../data/data_management/crud';
 
-export async function GET(request: Request) {
+export async function GET() {
     const response = await readAbout();
     return response;
 }
+
+export const dynamic = "force-dynamic";

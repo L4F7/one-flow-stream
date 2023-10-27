@@ -17,7 +17,6 @@ import { NextResponse } from 'next/server';
 
 // This function is used to open the file
 export async function openFile(id: string) {
-
     try {
         await connect();
         const file = await File.findOne({ filename: id });
@@ -26,7 +25,6 @@ export async function openFile(id: string) {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
-
     } catch (error: any) {
         return new NextResponse(error, {
             status: 500,
@@ -37,7 +35,6 @@ export async function openFile(id: string) {
 // This function is used to save the file
 export async function saveFile(request: Request, fileName: string) {
     try {
-
         await connect();
         const { fileContent } = await request.json();
         const existingFile = await File.findOne({ filename: fileName });
@@ -63,7 +60,6 @@ export async function saveFile(request: Request, fileName: string) {
         return new NextResponse('File saved successfully', {
             status: 200,
         });
-
     } catch (error: any) {
         return new NextResponse(error, {
             status: 500,
@@ -74,16 +70,16 @@ export async function saveFile(request: Request, fileName: string) {
 // This function is used to list all the files in the directory
 export async function listFiles() {
     try {
-
         await connect();
         const files = await File.find();
         const filesNames = files.map((file) => file.filename);
         const jsonFilesNames = JSON.stringify(filesNames);
         return new Response(jsonFilesNames, {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
-
     } catch (error: any) {
         return new NextResponse(error, {
             status: 500,
