@@ -34,7 +34,8 @@ export default function Home() {
         | 'SET_TYPED_FILENAME'
         | 'SET_SHOW_MODAL'
         | 'SET_CONTENT'
-        | 'RA_SET_CONTENT';
+        | 'RA_SET_CONTENT'
+        | 'SET_IS_LOADING';
 
     // Define the types of state that can be used in the reducer
     interface State {
@@ -50,6 +51,7 @@ export default function Home() {
         showModal: boolean;
         content: string;
         raContent: string;
+        isLoading: boolean;
     }
 
     // Define the initial state of the reducer
@@ -66,6 +68,7 @@ export default function Home() {
         showModal: false,
         content: '',
         raContent: '',
+        isLoading: false,
     };
 
     interface Action {
@@ -100,6 +103,8 @@ export default function Home() {
                 return { ...state, content: value };
             case 'RA_SET_CONTENT':
                 return { ...state, raContent: value };
+            case 'SET_IS_LOADING':
+                return { ...state, isLoading: value };
             default:
                 return state;
         }
@@ -119,6 +124,7 @@ export default function Home() {
             showModal,
             content,
             raContent,
+            isLoading,
         },
         dispatch,
     ] = useReducer(reducer, initialState);
@@ -229,6 +235,7 @@ export default function Home() {
     };
 
     const callSaveScriptAPI = async () => {
+        dispatch({ type: 'SET_IS_LOADING', value: true });
         try {
             if (content.length > 0) {
                 if (typedFilename !== '') {
@@ -240,6 +247,7 @@ export default function Home() {
                         headers: { 'Content-Type': 'application/json' },
                         body: requestBody,
                     });
+
                 } else {
                     throw new Error('Please type a name for the script.');
                 }
@@ -251,9 +259,11 @@ export default function Home() {
             dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
             dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
         }
+        dispatch({ type: 'SET_IS_LOADING', value: false });
     };
 
     const callListScriptAPI = async () => {
+        dispatch({ type: 'SET_IS_LOADING', value: true });
         try {
             const response = await fetch('/api/script/list', {
                 cache: 'no-store',
@@ -267,6 +277,7 @@ export default function Home() {
         } catch (error) {
             console.error(error);
         }
+        dispatch({ type: 'SET_IS_LOADING', value: false });
     };
 
     /*const callHashNameScriptAPI = async () => {
@@ -307,7 +318,11 @@ export default function Home() {
     };
 
     return (
-        <div className="h-screen flex flex-col">
+        <div
+            className={`h-screen flex flex-col ${
+                isLoading ? 'opacity-50 pointer-events-none' : ''
+            }`}
+        >
             {/* Alert PopUp Section */}
             {alertIsOpen && (
                 <AlertPopUp
@@ -356,7 +371,10 @@ export default function Home() {
                     <TextArea
                         content={content}
                         setContent={(newContent: String) =>
-                            dispatch({ type: 'SET_CONTENT', value: newContent })
+                            dispatch({
+                                type: 'SET_CONTENT',
+                                value: newContent,
+                            })
                         }
                         fileName={typedFilename}
                         setTypedFilename={handleTypedFilenameChange}
@@ -415,7 +433,9 @@ export default function Home() {
                                             <select
                                                 value={selectedFilename}
                                                 onChange={handleFilenameChange}
-                                                style={{ color: 'black' }}
+                                                style={{
+                                                    color: 'black',
+                                                }}
                                             >
                                                 <option value="" disabled>
                                                     Select a filename
@@ -465,7 +485,10 @@ export default function Home() {
                     <TextArea
                         content={outputText}
                         setContent={(newContent: String) =>
-                            dispatch({ type: 'SET_CONTENT', value: newContent })
+                            dispatch({
+                                type: 'SET_CONTENT',
+                                value: newContent,
+                            })
                         }
                         width="w-1/2"
                         backgroundColor="bg-neutral-100"
@@ -479,7 +502,10 @@ export default function Home() {
                     <TextArea
                         content={raContent}
                         setContent={(newContent: String) =>
-                            dispatch({ type: 'SET_CONTENT', value: newContent })
+                            dispatch({
+                                type: 'SET_CONTENT',
+                                value: newContent,
+                            })
                         }
                         height={'h-full'}
                         backgroundColor="bg-black"
@@ -490,6 +516,11 @@ export default function Home() {
                     />
                 </div>
             </main>
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900"></div>
+                </div>
+            )}
         </div>
     );
 }
