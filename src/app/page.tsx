@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useReducer, useEffect } from 'react';
+import { useReducer } from 'react';
 import { AboutInfo } from '@/utils/types';
 import TextArea from '@/components/TextArea';
 import AboutPopUp from '@/components/AboutPopUp';
@@ -35,7 +35,9 @@ export default function Home() {
         | 'SET_SHOW_MODAL'
         | 'SET_CONTENT'
         | 'RA_SET_CONTENT'
-        | 'SET_IS_LOADING';
+        | 'SET_IS_LOADING'
+        | 'SET_TA_FILENAME'
+        ;
 
     // Define the types of state that can be used in the reducer
     interface State {
@@ -52,6 +54,7 @@ export default function Home() {
         content: string;
         raContent: string;
         isLoading: boolean;
+        taFilename: string;
     }
 
     // Define the initial state of the reducer
@@ -69,6 +72,7 @@ export default function Home() {
         content: '',
         raContent: '',
         isLoading: false,
+        taFilename: '',
     };
 
     interface Action {
@@ -105,6 +109,8 @@ export default function Home() {
                 return { ...state, raContent: value };
             case 'SET_IS_LOADING':
                 return { ...state, isLoading: value };
+            case 'SET_TA_FILENAME':
+                return { ...state, taFilename: value };
             default:
                 return state;
         }
@@ -125,6 +131,7 @@ export default function Home() {
             content,
             raContent,
             isLoading,
+            taFilename,
         },
         dispatch,
     ] = useReducer(reducer, initialState);
@@ -178,6 +185,7 @@ export default function Home() {
             })
             .then((data) => {
                 dispatch({ type: 'SET_OUTPUT_TEXT', value: data.result });
+                dispatch({ type: 'SET_TA_FILENAME', value: typedFilename ? typedFilename.split('.')[0] + '.js' : '' });
             })
             .catch((error) => {
                 dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
@@ -188,6 +196,7 @@ export default function Home() {
 
     //API to call /Eval service from server using GET
     const callEvaluateScript = async () => {
+
         fetch(`api/eval`, {
             method: 'POST',
             headers: {
@@ -217,15 +226,14 @@ export default function Home() {
     // Scripts Calls
     const callOpenScriptAPI = async () => {
         try {
-            const filename = selectedFilename.split('.')[0];
-            const response = await fetch(`/api/script/${filename}`);
+            const response = await fetch(`/api/script/${selectedFilename}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch content');
             }
             const data = await response.json();
             const fileData = Buffer.from(data.fileData).toString('utf8');
             dispatch({ type: 'SET_CONTENT', value: fileData });
-            dispatch({ type: 'SET_TYPED_FILENAME', value: filename });
+            dispatch({ type: 'SET_TYPED_FILENAME', value: selectedFilename });
             dispatch({ type: 'SET_OUTPUT_TEXT', value: '' });
         } catch (error) {
             dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
@@ -280,24 +288,6 @@ export default function Home() {
         dispatch({ type: 'SET_IS_LOADING', value: false });
     };
 
-    /*const callHashNameScriptAPI = async () => {
-    try {
-      const requestBody = JSON.stringify({ fileName: typedFilename });
-      const response = await fetch('/api/script/hashName', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: requestBody
-      });
-      const data = await response.json();
-      sethashedFilename(data);
-    } catch (error) {
-      console.error(error);
-      setAlertMessage(`${error}`);
-      setAlertType('Error');
-      setAlertIsOpen(true);
-    }
-  }*/
-
     const handleTypedFilenameChange = (value: string) => {
         dispatch({ type: 'SET_TYPED_FILENAME', value: value });
         //callHashNameScriptAPI();
@@ -315,6 +305,8 @@ export default function Home() {
         dispatch({ type: 'SET_CONTENT', value: '' });
         dispatch({ type: 'SET_OUTPUT_TEXT', value: '' });
         dispatch({ type: 'RA_SET_CONTENT', value: '' });
+        dispatch({ type: 'SET_TYPED_FILENAME', value: '' });
+        dispatch({ type: 'SET_TA_FILENAME', value: '' });
     };
 
     return (
@@ -493,7 +485,7 @@ export default function Home() {
                         width="w-1/2"
                         backgroundColor="bg-neutral-100"
                         setReadOnly={true}
-                        fileName="Output.js"
+                        fileName={taFilename}
                     />
                 </div>
 

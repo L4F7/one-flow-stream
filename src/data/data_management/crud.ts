@@ -8,18 +8,17 @@
  * @version 1.0.0
  */
 
-import { readFile, readdir, writeFile } from 'fs/promises';
-import { createHash } from 'crypto';
+import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import File from '@/models/file';
 import connect from '@/utils/db';
 import { NextResponse } from 'next/server';
 
 // This function is used to open the file
-export async function openFile(id: string) {
+export async function openFile(filename: string) {
     try {
         await connect();
-        const file = await File.findOne({ filename: id });
+        const file = await File.findOne({ filename: filename });
         const jsonFile = JSON.stringify(file);
         return new Response(jsonFile, {
             status: 200,
@@ -33,11 +32,11 @@ export async function openFile(id: string) {
 }
 
 // This function is used to save the file
-export async function saveFile(request: Request, fileName: string) {
+export async function saveFile(request: Request, pFilename: string) {
     try {
         await connect();
         const { fileContent } = await request.json();
-        const existingFile = await File.findOne({ filename: fileName });
+        const existingFile = await File.findOne({ filename: pFilename });
 
         // If the file already exists, it will be updated
         if (existingFile) {
@@ -50,8 +49,7 @@ export async function saveFile(request: Request, fileName: string) {
 
         // If the file does not exist, it will be created
         const file = new File({
-            filename: fileName,
-            extension: 'ofs',
+            filename: pFilename,
             fileData: fileContent,
         });
 
@@ -84,26 +82,6 @@ export async function listFiles() {
         return new NextResponse(error, {
             status: 500,
         });
-    }
-}
-
-// This function is used to hash the file name
-export async function hashFileName(request: Request) {
-    try {
-        const jsonData = await request.json();
-        const fileName = jsonData.fileName;
-        const hashedFilename = createHash('sha256')
-            .update(fileName)
-            .digest('hex');
-
-        const jsonFileName = JSON.stringify(hashedFilename);
-        return new Response(jsonFileName, {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    } catch (error) {
-        console.error(error);
-        return new Response('Error reading the directory', { status: 500 });
     }
 }
 
@@ -145,7 +123,6 @@ const crud = {
     openFile,
     saveFile,
     listFiles,
-    hashFileName,
     openEvaluatedFile,
     readAbout,
 };

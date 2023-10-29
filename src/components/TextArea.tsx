@@ -251,7 +251,8 @@ const TextArea: React.FC<TextAreaProps> = ({
             <div className="flex" style={{ height: '95%', maxHeight: '800px' }}>
                 {showInfo && ( // If showInfo is true, show the LineCounterArea
                     <LineCounterArea
-                        content={setReadOnly ? content : text}
+                        //content={setReadOnly ? content : text}
+                        content={content}
                         lineCounterAreaRef={lineCounterAreaRef}
                     />
                 )}
