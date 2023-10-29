@@ -32,5 +32,9 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3.16.0"
+  },
+  "engines" : {
+    "npm" : ">=9.5.0 <10.1.0",
+    "node" : ">=18.0.0 <20.7.0"
   }
 }
