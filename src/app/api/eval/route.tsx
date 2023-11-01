@@ -31,7 +31,7 @@ export async function POST(request: Request) {
                 { status: 500 }
             );
 
-        const filePathLoad = `../../../data/js_scripts/Output.js`;
+        const filePathLoad = `../../../data/js_scripts/Output.mjs`;
 
         // Execute the JavaScript code   
         

@@ -168,12 +168,18 @@ export default function Home() {
 
     //API to call /Compile service from server using POST
     const handleSendToServer = () => {
+        
+        const data = {
+            code: content,
+            filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '' 
+        };
+
         fetch(`api/compile`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: content,
+            body: JSON.stringify(data),
         })
             .then((response) => {
                 if (!response.ok) {
