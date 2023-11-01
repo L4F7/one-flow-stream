@@ -203,12 +203,17 @@ export default function Home() {
     //API to call /Eval service from server using GET
     const callEvaluateScript = async () => {
 
+        const data = {
+            code: outputText,
+            filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '' 
+        };
+
         fetch(`api/eval`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: outputText,
+            body: JSON.stringify(data),
         })
             .then((response) => {
                 if (!response.ok) {

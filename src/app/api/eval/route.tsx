@@ -24,14 +24,19 @@ const __dirname = dirname(__filename);
 
 export async function POST(request: Request) {
     try {
-        const content = await request.text();
-        if (!content || content.length == 0)
+
+        const content = await request.json();
+
+        if (!content || content.code.length == 0)
             return NextResponse.json(
                 { message: `Error: No hay datos en el area de TA` },
                 { status: 500 }
             );
 
-        const filePathLoad = `../../../data/js_scripts/Output.mjs`;
+
+        const filePathLoad = `../../../data/js_scripts/${content.filename}`;
+
+        //const filePathLoad = `../../../data/js_scripts/Output.js`;
 
         // Execute the JavaScript code   
         

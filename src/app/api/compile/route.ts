@@ -30,14 +30,14 @@ export async function POST(request: Request) {
 
         const preloadJSFile = await readFile(jsFilePath, 'utf8');
 
-        const timestampedText = `Echo from server: at ${new Date().toISOString()}: \n${preloadJSFile}`;
+        // const timestampedText = `Echo from server: at ${new Date().toISOString()}: \n${preloadJSFile}`;
 
-        const filePathSaveOutput = `./src/data/js_scripts/Output.mjs`;
+        // const filePathSaveOutput = `./src/data/js_scripts/Output.mjs`;
 
-        await writeFile(filePathSaveOutput, preloadJSFile, 'utf-8');
+        // await writeFile(filePathSaveOutput, preloadJSFile, 'utf-8');
 
         return NextResponse.json(
-            { message: 'File compiled successfully.', result: timestampedText },
+            { message: 'File compiled successfully.', result: preloadJSFile },
             { status: 200 }
         );
     } catch (error) {
