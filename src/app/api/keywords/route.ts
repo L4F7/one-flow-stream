@@ -8,23 +8,9 @@
  * @version 1.0.0
  */
 
-import { NextResponse } from 'next/server';
-import { readFile } from 'fs/promises';
-const path = require('path');
+import { getKeywords } from '../../../data/data_management/crud';
 
 export async function GET() {
-    try {
-        const filePath = path.resolve(`./src/data/keywords.json`);
-        const file = await readFile(filePath, 'utf-8');
-        return NextResponse.json(
-            { message: 'Keywords file loaded successfully.', keywords: file },
-            { status: 200 }
-        );
-    } catch (error) {
-        console.error('ERROR en try: ' + error);
-        return NextResponse.json(
-            { message: 'Error loading keywords file', keywords: [] },
-            { status: 500 }
-        );
-    }
+    const response = await getKeywords();
+    return response;
 }

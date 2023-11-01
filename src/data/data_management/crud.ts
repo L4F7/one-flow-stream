@@ -8,11 +8,15 @@
  * @version 1.0.0
  */
 
-import { readFile } from 'fs/promises';
-import { resolve } from 'path';
+import { readFile, writeFile } from 'fs/promises';
+import { NextResponse } from 'next/server';
+import { resolve, dirname } from 'path';
+import { exec } from 'child_process';
+import { fileURLToPath } from 'url';
 import File from '@/models/file';
 import connect from '@/utils/db';
-import { NextResponse } from 'next/server';
+import { promisify } from 'util';
+import { get } from 'http';
 
 // This function is used to open the file
 export async function openFile(filename: string) {
@@ -85,21 +89,81 @@ export async function listFiles() {
     }
 }
 
-// This function is used to open the file that contains the evaluated script
-export async function openEvaluatedFile() {
+// This function is used to compile the file 
+export async function compileFile(request: Request) {
     try {
-        const filePath = resolve(`./src/data/ra_script/ra_fake.txt`);
-        const data = await readFile(filePath, 'utf8');
-        const jsonData = JSON.stringify({ fileData: data });
-        return new Response(jsonData, {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
+        const content = await request.json();
+
+        if (!content || !content.code) {
+            return NextResponse.json(
+                { message: 'Error: No hay datos en el editor EA' },
+                { status: 500 }
+            );
+        }
+
+        const code = content.code;
+
+        const jsFilePath = resolve(`./src/data/js_scripts/${content.filename}`);
+
+        const compiledFile = await readFile(jsFilePath, 'utf8');
+
+        return NextResponse.json(
+            { message: 'File compiled successfully.', result: compiledFile },
+            { status: 200 }
+        );
     } catch (error) {
-        return new Response('Error reading the file', { status: 500 });
+        return NextResponse.json('Error loading about file', { status: 500 });
     }
 }
 
+// This function is used to open the file that contains the evaluated script
+export async function openEvaluatedFile(request: Request) {
+    
+    const execPromisified = promisify(exec); // Promisify the exec function
+    const __filename = fileURLToPath(import.meta.url); // Get the current file path
+    const __dirname = dirname(__filename); // Get the current directory path
+
+    try {
+        const content = await request.json();
+
+        if (!content || content.code.length == 0)
+            return NextResponse.json(
+                { message: `Error: No hay datos en el area de TA` },
+                { status: 500 }
+            );
+
+        const filePathLoad = `../../data/js_scripts/${content.filename}`;
+
+        let output: String = '';
+
+        await execPromisified(`node ${filePathLoad}`, {
+            cwd: __dirname,
+        })
+            .then((result) => {
+                output = result.stdout;
+            })
+            .catch((error) => {
+                output = error;
+            });
+
+        const filePathSave = resolve(`./src/data/ra_script/ra_output.txt`);
+
+        await writeFile(filePathSave, output.toString(), 'utf-8');
+        const fileSaved = await readFile(filePathSave, 'utf8');
+
+        return NextResponse.json(
+            { message: `File evaluated successfully.`, result: fileSaved },
+            { status: 200 }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            { message: `Error evaluating TA script` },
+            { status: 500 }
+        );
+    }
+}
+
+// This function is used to read the about file
 export async function readAbout() {
     try {
         const filePath = resolve(`./src/data/about.json`);
@@ -118,13 +182,33 @@ export async function readAbout() {
     }
 }
 
+// This function is used to get the keywords
+export async function getKeywords() {
+    try {
+        const filePath = resolve(`./src/data/keywords.json`);
+        const file = await readFile(filePath, 'utf-8');
+        return NextResponse.json(
+            { message: 'Keywords file loaded successfully.', keywords: file },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error('ERROR en try: ' + error);
+        return NextResponse.json(
+            { message: 'Error loading keywords file', keywords: [] },
+            { status: 500 }
+        );
+    }
+}
+
 // This object is used to export all the functions
 const crud = {
     openFile,
     saveFile,
     listFiles,
+    compileFile,
     openEvaluatedFile,
     readAbout,
+    getKeywords,
 };
 
 export default crud;

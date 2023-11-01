@@ -19,7 +19,6 @@ import AlertPopUp from '@/components/AlertPopUp';
 const bgColor = 'bg-slate-400';
 
 export default function Home() {
-    // const [hashedFilename, sethashedFilename] = useState('')
 
     // Define the types of actions that can be dispatched
     type ActionType =
@@ -36,8 +35,7 @@ export default function Home() {
         | 'SET_CONTENT'
         | 'RA_SET_CONTENT'
         | 'SET_IS_LOADING'
-        | 'SET_TA_FILENAME'
-        ;
+        | 'SET_TA_FILENAME';
 
     // Define the types of state that can be used in the reducer
     interface State {
@@ -168,10 +166,9 @@ export default function Home() {
 
     //API to call /Compile service from server using POST
     const handleSendToServer = () => {
-        
         const data = {
             code: content,
-            filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '' 
+            filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '',
         };
 
         fetch(`api/compile`, {
@@ -191,7 +188,12 @@ export default function Home() {
             })
             .then((data) => {
                 dispatch({ type: 'SET_OUTPUT_TEXT', value: data.result });
-                dispatch({ type: 'SET_TA_FILENAME', value: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '' });
+                dispatch({
+                    type: 'SET_TA_FILENAME',
+                    value: typedFilename
+                        ? typedFilename.split('.')[0] + '.mjs'
+                        : '',
+                });
             })
             .catch((error) => {
                 dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
@@ -202,10 +204,9 @@ export default function Home() {
 
     //API to call /Eval service from server using GET
     const callEvaluateScript = async () => {
-
         const data = {
             code: outputText,
-            filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '' 
+            filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '',
         };
 
         fetch(`api/eval`, {
@@ -236,72 +237,80 @@ export default function Home() {
 
     // Scripts Calls
     const callOpenScriptAPI = async () => {
-        try {
-            const response = await fetch(`/api/script/${selectedFilename}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch content');
-            }
-            const data = await response.json();
-            const fileData = Buffer.from(data.fileData).toString('utf8');
-            dispatch({ type: 'SET_CONTENT', value: fileData });
-            dispatch({ type: 'SET_TYPED_FILENAME', value: selectedFilename });
-            dispatch({ type: 'SET_OUTPUT_TEXT', value: '' });
-        } catch (error) {
-            dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
-            dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
-            dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
-        }
+        fetch(`/api/script/${selectedFilename}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch content');
+                }
+                clearContent();
+                return response.json();
+            })
+            .then((data) => {
+                const fileData = Buffer.from(data.fileData).toString('utf8');
+                dispatch({ type: 'SET_CONTENT', value: fileData });
+                dispatch({
+                    type: 'SET_TYPED_FILENAME',
+                    value: selectedFilename,
+                });
+                dispatch({ type: 'SET_OUTPUT_TEXT', value: '' });
+            })
+            .catch((error) => {
+                dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
+                dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
+                dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
+            });
     };
 
     const callSaveScriptAPI = async () => {
         dispatch({ type: 'SET_IS_LOADING', value: true });
-        try {
-            if (content.length > 0) {
-                if (typedFilename !== '') {
-                    const requestBody = JSON.stringify({
-                        fileContent: Buffer.from(content, 'utf8'),
-                    });
-                    await fetch(`/api/script/save/${typedFilename}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: requestBody,
-                    });
 
-                } else {
-                    throw new Error('Please type a name for the script.');
-                }
-            } else {
+        try {
+            if (content.length === 0)
                 throw new Error('Please type a script to save.');
-            }
+
+            if (typedFilename === '')
+                throw new Error('Please type a name for the script.');
+
+            const requestBody = JSON.stringify({
+                fileContent: Buffer.from(content, 'utf8'),
+            });
+            
+            await fetch(`/api/script/save/${typedFilename}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: requestBody,
+            });
         } catch (error) {
             dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
             dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
             dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
         }
+
         dispatch({ type: 'SET_IS_LOADING', value: false });
     };
 
     const callListScriptAPI = async () => {
         dispatch({ type: 'SET_IS_LOADING', value: true });
-        try {
-            const response = await fetch('/api/script/list', {
-                cache: 'no-store',
-            });
+
+        fetch(`/api/script/list`, { cache: 'no-store' }).then((response) => {
             if (!response.ok) {
                 throw new Error('Failed to fetch filenames');
             }
-            const data = await response.json();
+            return response.json();
+        }).then((data) => {
             dispatch({ type: 'SET_FILENAMES', value: data });
             dispatch({ type: 'SET_SHOW_MODAL', value: true });
-        } catch (error) {
-            console.error(error);
-        }
+        }).catch((error) => {
+            dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
+            dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
+            dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
+        });
+
         dispatch({ type: 'SET_IS_LOADING', value: false });
     };
 
     const handleTypedFilenameChange = (value: string) => {
         dispatch({ type: 'SET_TYPED_FILENAME', value: value });
-        //callHashNameScriptAPI();
     };
 
     const handleFilenameChange = ({
