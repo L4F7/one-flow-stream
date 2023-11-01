@@ -1,0 +1,6 @@
+server(started, 1698864736).
+/*Wed Nov 01 12:52:16 2023*/ request(1, 1698864736.337, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
+completed(1, 0.0, 44, 200, ok).
+server(started, 1698864755).
+/*Wed Nov 01 12:52:35 2023*/ request(1, 1698864755.042, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
+completed(1, 0.0, 44, 200, ok).
