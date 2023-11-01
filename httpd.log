@@ -4,3 +4,8 @@ completed(1, 0.0, 44, 200, ok).
 server(started, 1698864755).
 /*Wed Nov 01 12:52:35 2023*/ request(1, 1698864755.042, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
 completed(1, 0.0, 44, 200, ok).
+server(started, 1698864939).
+/*Wed Nov 01 12:55:38 2023*/ request(1, 1698864938.725, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
+completed(1, 0.0, 44, 200, ok).
+/*Wed Nov 01 12:55:40 2023*/ request(2, 1698864940.981, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
+completed(2, 0.0, 44, 200, ok).
