@@ -353,7 +353,9 @@ export default function Home() {
                         </h1>
                     </div>
                     <div className="flex justify-end w-1/4">
-                        <button className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
+                        <button 
+                            className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
+                        >
                             Pref.
                         </button>
                         <button

@@ -17,6 +17,7 @@ import File from '@/models/file';
 import connect from '@/utils/db';
 import { promisify } from 'util';
 import { get } from 'http';
+import dns from 'node:dns';
 
 // This function is used to open the file
 export async function openFile(filename: string) {
@@ -89,7 +90,7 @@ export async function listFiles() {
     }
 }
 
-// This function is used to compile the file 
+// This function is used to compile the file
 export async function compileFile(request: Request) {
     try {
         const content = await request.json();
@@ -118,7 +119,6 @@ export async function compileFile(request: Request) {
 
 // This function is used to open the file that contains the evaluated script
 export async function openEvaluatedFile(request: Request) {
-    
     const execPromisified = promisify(exec); // Promisify the exec function
     const __filename = fileURLToPath(import.meta.url); // Get the current file path
     const __dirname = dirname(__filename); // Get the current directory path
@@ -200,6 +200,32 @@ export async function getKeywords() {
     }
 }
 
+// Fetch prolog server
+export const fetchPrologServer = async () => {
+
+    dns.setDefaultResultOrder('ipv4first');
+
+    fetch('http://localhost:8000/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ a: 1, b: 2 }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch content');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
 // This object is used to export all the functions
 const crud = {
     openFile,
@@ -209,6 +235,7 @@ const crud = {
     openEvaluatedFile,
     readAbout,
     getKeywords,
+    fetchPrologServer,
 };
 
 export default crud;
