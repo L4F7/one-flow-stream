@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
         const timestampedText = `Echo from server: at ${new Date().toISOString()}: \n${preloadJSFile}`;
 
-        const filePathSaveOutput = `./src/data/js_scripts/Output.js`;
+        const filePathSaveOutput = `./src/data/js_scripts/Output.mjs`;
 
         await writeFile(filePathSaveOutput, preloadJSFile, 'utf-8');
 

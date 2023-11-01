@@ -191,7 +191,7 @@ export default function Home() {
             })
             .then((data) => {
                 dispatch({ type: 'SET_OUTPUT_TEXT', value: data.result });
-                dispatch({ type: 'SET_TA_FILENAME', value: typedFilename ? typedFilename.split('.')[0] + '.js' : '' });
+                dispatch({ type: 'SET_TA_FILENAME', value: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '' });
             })
             .catch((error) => {
                 dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
