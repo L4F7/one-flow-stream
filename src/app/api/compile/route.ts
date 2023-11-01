@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         }
 
         const timestampedText = `Echo from server: at ${new Date().toISOString()}: \n${content}`;
-        const filePathSaveOutput = `./src/app/api/script/Output.js`;
+        const filePathSaveOutput = `./src/data/js_scripts/Output.js`;
 
         await writeFile(filePathSaveOutput, content, 'utf-8');
 

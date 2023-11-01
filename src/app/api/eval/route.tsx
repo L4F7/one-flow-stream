@@ -31,7 +31,7 @@ export async function POST(request: Request) {
                 { status: 500 }
             );
 
-        const filePathLoad = `../script/Output.js`;
+        const filePathLoad = `../../../data/js_scripts/Output.js`;
 
         // Execute the JavaScript code   
         
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
             output = error;
         }
 
-        const filePathSave = resolve(`./src/app/api/script/ra_fake.txt`);
+        const filePathSave = resolve(`./src/data/ra_script/ra_output.txt`);
 
         await writeFile(filePathSave, output.toString(), 'utf-8'); 
         const fileSaved = await readFile(filePathSave, 'utf8');
