@@ -19,7 +19,6 @@ Based on the code provided by Carlos Loría-Sáenz
 Original author: loriacarlos@gmail.com
 */
 
-*/
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
