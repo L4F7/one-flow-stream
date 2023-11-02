@@ -5,13 +5,19 @@ VERB: POST
 Body 
     Expects:JSON {"filePath":Path_of_the_file}
 
-* @authors
- *  - Kenneth Alfaro Barboza
- *  - Luis Fuentes Fuentes
- *  - Luis Eduardo Restrepo Veintemilla
- *  - Maria Angelica Robles Azofeifa
- *  - Royer Zuñiga Villareal
- * @version 1.0.0
+Returns: {"status":true, "answer":Code, "msg":"succeed"} if the file was evaluated successfully
+         {"status":false, "answer":0, "msg":"Error: failed evaluation"} if the file was not evaluated successfully
+
+Authors:
+  - Kenneth Alfaro Barboza
+  - Luis Fuentes Fuentes
+  - Luis Eduardo Restrepo Veintemilla
+  - Maria Angelica Robles Azofeifa
+  - Royer Zuñiga Villareal
+
+Based on the code provided by Carlos Loría-Sáenz
+Original author: loriacarlos@gmail.com
+*/
 
 */
 :- use_module(library(http/thread_httpd)).
