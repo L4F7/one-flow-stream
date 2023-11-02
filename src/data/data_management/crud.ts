@@ -96,7 +96,6 @@ export async function compileFile(filepath : string) {
     try {
         
         const compiledFile = await readFile(filepath, 'utf8');
-        console.log(`compilingL ${filepath}`)
         return NextResponse.json(
             { message: 'File compiled successfully.', result: compiledFile },
             { status: 200 }
@@ -166,7 +165,6 @@ export async function readAbout() {
             headers: { 'Content-Type': 'application/json' },
         });
     } catch (error) {
-        console.error('ERROR en try: ' + error);
         return new Response('Error reading the file', { status: 500 });
     }
 }
@@ -181,7 +179,6 @@ export async function getKeywords() {
             { status: 200 }
         );
     } catch (error) {
-        console.error('ERROR en try: ' + error);
         return NextResponse.json(
             { message: 'Error loading keywords file', keywords: [] },
             { status: 500 }

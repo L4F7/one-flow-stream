@@ -19,7 +19,6 @@ import AlertPopUp from '@/components/AlertPopUp';
 const bgColor = 'bg-slate-400';
 
 export default function Home() {
-
     // Define the types of actions that can be dispatched
     type ActionType =
         | 'SET_ALERT_IS_OPEN'
@@ -169,7 +168,7 @@ export default function Home() {
         const data = {
             code: content,
             filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '',
-            filepath: typedFilename
+            filepath: typedFilename,
         };
 
         fetch(`api/compile`, {
@@ -264,7 +263,6 @@ export default function Home() {
 
     const callSaveScriptAPI = async () => {
         dispatch({ type: 'SET_IS_LOADING', value: true });
-
         try {
             if (content.length === 0)
                 throw new Error('Please type a script to save.');
@@ -275,7 +273,7 @@ export default function Home() {
             const requestBody = JSON.stringify({
                 fileContent: Buffer.from(content, 'utf8'),
             });
-            
+
             await fetch(`/api/script/save/${typedFilename}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -286,26 +284,28 @@ export default function Home() {
             dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
             dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
         }
-
         dispatch({ type: 'SET_IS_LOADING', value: false });
     };
 
     const callListScriptAPI = async () => {
         dispatch({ type: 'SET_IS_LOADING', value: true });
 
-        fetch(`/api/script/list`, { cache: 'no-store' }).then((response) => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch filenames');
-            }
-            return response.json();
-        }).then((data) => {
-            dispatch({ type: 'SET_FILENAMES', value: data });
-            dispatch({ type: 'SET_SHOW_MODAL', value: true });
-        }).catch((error) => {
-            dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
-            dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
-            dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
-        });
+        await fetch(`/api/script/list`, { cache: 'no-store' })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch filenames');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                dispatch({ type: 'SET_FILENAMES', value: data });
+                dispatch({ type: 'SET_SHOW_MODAL', value: true });
+            })
+            .catch((error) => {
+                dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
+                dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });
+                dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
+            });
 
         dispatch({ type: 'SET_IS_LOADING', value: false });
     };
@@ -354,9 +354,7 @@ export default function Home() {
                         </h1>
                     </div>
                     <div className="flex justify-end w-1/4">
-                        <button 
-                            className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
-                        >
+                        <button className="mr-4 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded">
                             Pref.
                         </button>
                         <button
