@@ -1,13 +1,5 @@
-Error: Command failed: node ../../data/js_scripts/test_1.mjs
-file:///C:/Users/Fuent/Desktop/one-flow-stream/src/data/js_scripts/test_1.mjs:6
-b = 11;
-  ^
-
-TypeError: Assignment to constant variable.
-    at file:///C:/Users/Fuent/Desktop/one-flow-stream/src/data/js_scripts/test_1.mjs:6:3
-    at ModuleJob.run (node:internal/modules/esm/module_job:217:25)
-    at async ModuleLoader.import (node:internal/modules/esm/loader:308:24)
-    at async loadESM (node:internal/process/esm_loader:42:7)
-    at async handleMainPromise (node:internal/modules/run_main:66:12)
-
-Node.js v20.7.0
+12
+14
+16
+18
+20

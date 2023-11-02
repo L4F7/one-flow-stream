@@ -9,3 +9,118 @@ server(started, 1698864939).
 completed(1, 0.0, 44, 200, ok).
 /*Wed Nov 01 12:55:40 2023*/ request(2, 1698864940.981, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
 completed(2, 0.0, 44, 200, ok).
+server(started, 1698877899).
+/*Wed Nov 01 16:31:39 2023*/ request(1, 1698877899.395, [peer(ip(127,0,0,1)),method(post),request_uri('/add'),path('/add'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(13)]).
+completed(1, 0.015625, 44, 200, ok).
+/*Wed Nov 01 20:33:40 2023*/ request(2, 1698892420.177, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(42)]).
+completed(2, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:33:53 2023*/ request(3, 1698892433.848, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(41)]).
+completed(3, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:34:36 2023*/ request(4, 1698892476.141, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(38)]).
+completed(4, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:35:01 2023*/ request(5, 1698892501.412, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(38)]).
+completed(5, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:35:20 2023*/ request(6, 1698892520.281, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(40)]).
+completed(6, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:36:48 2023*/ request(7, 1698892608.731, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(40)]).
+completed(7, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:37:15 2023*/ request(8, 1698892635.364, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(8, 0.0, 67, 404, error(404,'/eval')).
+/*Wed Nov 01 20:37:29 2023*/ request(9, 1698892649.196, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(9, 0.0, 67, 404, error(404,'/eval')).
+server(stopped, 1698892663).
+server(started, 1698892673).
+/*Wed Nov 01 20:37:53 2023*/ request(1, 1698892673.253, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(1, 0.015625, 69, 500, error("source_sink `\"test_1.mjs\"' does not exist")).
+/*Wed Nov 01 20:38:31 2023*/ request(2, 1698892711.787, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(2, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:39:29 2023*/ request(3, 1698892769.156, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(31)]).
+completed(3, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:40:17 2023*/ request(4, 1698892817.570, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(4, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:47:21 2023*/ request(5, 1698893241.405, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(5, 0.0, 69, 500, error("source_sink `\"test_1.mjs\"' does not exist")).
+/*Wed Nov 01 20:49:16 2023*/ request(6, 1698893356.048, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(6, 0.0, 69, 500, error("source_sink `\"test_1.mjs\"' does not exist")).
+/*Wed Nov 01 20:51:05 2023*/ request(7, 1698893465.477, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(25)]).
+completed(7, 0.0, 69, 500, error("source_sink `\"test_1.mjs\"' does not exist")).
+/*Wed Nov 01 20:54:56 2023*/ request(8, 1698893696.290, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(8, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:56:54 2023*/ request(9, 1698893814.607, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(9, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:58:29 2023*/ request(10, 1698893909.294, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(10, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:58:43 2023*/ request(11, 1698893923.111, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(11, 0.0, 44, 200, ok).
+/*Wed Nov 01 20:59:12 2023*/ request(12, 1698893952.152, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(12, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:04:15 2023*/ request(13, 1698894255.260, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(13, 0.015625, 44, 200, ok).
+/*Wed Nov 01 21:04:48 2023*/ request(14, 1698894288.595, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(14, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:19:45 2023*/ request(15, 1698895185.457, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(15, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:21:37 2023*/ request(16, 1698895297.913, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(16, 0.015624999999999993, 44, 200, ok).
+/*Wed Nov 01 21:22:53 2023*/ request(17, 1698895373.247, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(17, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:25:19 2023*/ request(18, 1698895519.078, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(18, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:26:51 2023*/ request(19, 1698895611.904, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(19, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:27:23 2023*/ request(20, 1698895643.823, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(20, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:28:06 2023*/ request(21, 1698895686.478, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(21, 0.015625000000000014, 44, 200, ok).
+/*Wed Nov 01 21:28:14 2023*/ request(22, 1698895694.945, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(22, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:29:46 2023*/ request(23, 1698895786.865, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(23, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:30:01 2023*/ request(24, 1698895801.235, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(24, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:30:17 2023*/ request(25, 1698895817.464, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(25, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:30:21 2023*/ request(26, 1698895821.994, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(26, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:30:23 2023*/ request(27, 1698895823.314, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(27, 0.0, 44, 200, ok).
+server(stopped, 1698895949).
+server(started, 1698895960).
+/*Wed Nov 01 21:32:40 2023*/ request(1, 1698895960.238, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(1, 0.03125, 102, 500, error("stamp_date_time/3: Domain error: `timezone' expected, found `'GTM''")).
+server(stopped, 1698895980).
+server(started, 1698895984).
+/*Wed Nov 01 21:33:03 2023*/ request(1, 1698895983.673, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(1, 0.03125, 102, 500, error("stamp_date_time/3: Domain error: `timezone' expected, found `'GMT''")).
+server(stopped, 1698895998).
+server(started, 1698896002).
+/*Wed Nov 01 21:33:22 2023*/ request(1, 1698896002.310, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(1, 0.04687500000000001, 44, 200, ok).
+/*Wed Nov 01 21:34:14 2023*/ request(2, 1698896054.417, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(2, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:34:56 2023*/ request(3, 1698896096.108, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(3, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:36:43 2023*/ request(4, 1698896203.689, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(37)]).
+completed(4, 0.0, 90, 500, error("source_sink `\"./src/data/js_scripts/\"' does not exist")).
+/*Wed Nov 01 21:37:10 2023*/ request(5, 1698896230.080, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(55)]).
+completed(5, 0.0, 108, 500, error("source_sink `\"./src/data/js_scripts/testConsoleLog.mjs\"' does not exist")).
+/*Wed Nov 01 21:40:31 2023*/ request(6, 1698896431.045, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(6, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:43:23 2023*/ request(7, 1698896603.941, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(7, 0.0, 44, 200, ok).
+/*Wed Nov 01 21:43:31 2023*/ request(8, 1698896611.030, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(37)]).
+completed(8, 0.0, 90, 500, error("source_sink `\"./src/data/js_scripts/\"' does not exist")).
+/*Wed Nov 01 22:03:43 2023*/ request(9, 1698897823.703, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(9, 0.0, 44, 200, ok).
+/*Wed Nov 01 22:07:29 2023*/ request(10, 1698898049.350, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(10, 0.0, 44, 200, ok).
+/*Wed Nov 01 22:07:31 2023*/ request(11, 1698898051.860, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(11, 0.0, 44, 200, ok).
+/*Wed Nov 01 22:07:49 2023*/ request(12, 1698898069.627, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(37)]).
+completed(12, 0.0, 90, 500, error("source_sink `\"./src/data/js_scripts/\"' does not exist")).
+/*Wed Nov 01 22:07:54 2023*/ request(13, 1698898074.598, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(13, 0.0, 44, 200, ok).
+/*Wed Nov 01 22:07:57 2023*/ request(14, 1698898077.828, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(14, 0.0, 44, 200, ok).
+/*Wed Nov 01 22:08:56 2023*/ request(15, 1698898136.165, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(15, 0.0, 44, 200, ok).

@@ -18,6 +18,7 @@ import connect from '@/utils/db';
 import { promisify } from 'util';
 import { get } from 'http';
 import dns from 'node:dns';
+import { StringExpressionOperator } from 'mongoose';
 
 // This function is used to open the file
 export async function openFile(filename: string) {
@@ -91,29 +92,17 @@ export async function listFiles() {
 }
 
 // This function is used to compile the file
-export async function compileFile(request: Request) {
+export async function compileFile(filepath : string) {
     try {
-        const content = await request.json();
-
-        if (!content || !content.code) {
-            return NextResponse.json(
-                { message: 'Error: No hay datos en el editor EA' },
-                { status: 500 }
-            );
-        }
-
-        const code = content.code;
-
-        const jsFilePath = resolve(`./src/data/js_scripts/${content.filename}`);
-
-        const compiledFile = await readFile(jsFilePath, 'utf8');
-
+        
+        const compiledFile = await readFile(filepath, 'utf8');
+        console.log(`compilingL ${filepath}`)
         return NextResponse.json(
             { message: 'File compiled successfully.', result: compiledFile },
             { status: 200 }
         );
     } catch (error) {
-        return NextResponse.json('Error loading about file', { status: 500 });
+        return NextResponse.json('Error compiling file', { status: 500 });
     }
 }
 
@@ -201,28 +190,31 @@ export async function getKeywords() {
 }
 
 // Fetch prolog server
-export const fetchPrologServer = async () => {
+export const fetchPrologServer = (filePath: string) => {
 
-    dns.setDefaultResultOrder('ipv4first');
+    return new Promise((resolve, reject) => {
+        dns.setDefaultResultOrder('ipv4first');
 
-    fetch('http://localhost:8000/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ a: 1, b: 2 }),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch content');
-            }
-            return response.json();
+        fetch('http://localhost:8000/eval', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ fileName : filePath}),
         })
-        .then((data) => {
-            console.log(data);
-        })
-        .catch((error) => {
-            console.log(error);
+            .then((response) => {
+                if (!response.ok) {
+                    reject(new Error('Failed to fetch content'));
+                }
+                resolve(response.json());
+            })
+            .then((data) => {
+                console.log(`Data from Prolog: ${data}`);
+            })
+            .catch((error) => {
+                console.log(error);
+                reject(error);
+            });
         });
 };
 

@@ -8,10 +8,9 @@
  * @version 1.0.0
  */
 
-import { readAbout, fetchPrologServer } from '../../../data/data_management/crud';
+import { readAbout } from '../../../data/data_management/crud';
 
 export async function GET() {
-    fetchPrologServer();
     const response = await readAbout();
     return response;
 }
