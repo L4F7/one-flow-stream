@@ -1,15 +1,18 @@
 /*
 Service for adding two numbers
-URI: /add
+URI: /eval
 VERB: POST
 Body 
-    Expects:JSON {"a":Some_Number1, "b":Some_Number2 }
-    
-Returns: {"accepted":true, "answer":Some_Number1+Some_Number2}    if data ok
-         {"accepted":false, "answer":0, "msg":some_error_message} othwerwise
-             
-author: loriacarlos@gmail.com
-since: 2022
+    Expects:JSON {"filePath":Path_of_the_file}
+
+* @authors
+ *  - Kenneth Alfaro Barboza
+ *  - Luis Fuentes Fuentes
+ *  - Luis Eduardo Restrepo Veintemilla
+ *  - Maria Angelica Robles Azofeifa
+ *  - Royer Zuñiga Villareal
+ * @version 1.0.0
+
 */
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -36,7 +39,7 @@ server(Port) :-
 
 set_setting(http:logfile, 'service_log_file.log').
 
-%%%%%%%%%%%%%%%%%%%%%%%%%% BUSINESS LOGIC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%% LOGIC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calls evaluation.
 evaluate(_{fileName:X}, _{status: true, answer:Code, msg:'succeed'}) :-
     read_js_file_content(X, JsContent), 
