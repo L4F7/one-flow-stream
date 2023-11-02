@@ -9,7 +9,7 @@
  */
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faCloudUpload } from '@fortawesome/free-solid-svg-icons';
 import PopUp from 'react-modal';
 
 PopUp.setAppElement('#main');
@@ -53,10 +53,11 @@ const AlertPopUp: React.FC<AlertPopUpProps> = ({
             <div className="flex items-center">
                 <div>
                     <FontAwesomeIcon
-                        icon={faExclamationTriangle}
-                        className="text-red-500 text-2xl mr-2"
+                        icon={type === 'Error' ? faExclamationTriangle : faCloudUpload}
+                        className={type === 'Error' ? "text-red-500 text-2xl mr-2" : "text-green-500 text-2xl mr-2"}
+                        color='Blue'
                     />{' '}
-                    Alert
+                    {type === 'Error' ? "Alert" : "Success"}
                     <br />
                     <br />
                     <p>{message}</p>
@@ -67,7 +68,7 @@ const AlertPopUp: React.FC<AlertPopUpProps> = ({
                 onClick={onClose}
                 className="h-1/10 bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded"
             >
-                {' Cerrar '}
+                {' Close '}
             </button>
         </PopUp>
     );

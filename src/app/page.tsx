@@ -279,6 +279,9 @@ export default function Home() {
                 headers: { 'Content-Type': 'application/json' },
                 body: requestBody,
             });
+            dispatch({ type: 'SET_ALERT_MESSAGE', value: `File: ${typedFilename} was successfully saved in the DB` });
+            dispatch({ type: 'SET_ALERT_TYPE', value: 'Success' });
+            dispatch({ type: 'SET_ALERT_IS_OPEN', value: true });
         } catch (error) {
             dispatch({ type: 'SET_ALERT_MESSAGE', value: `${error}` });
             dispatch({ type: 'SET_ALERT_TYPE', value: 'Error' });

@@ -124,3 +124,9 @@ completed(13, 0.0, 44, 200, ok).
 completed(14, 0.0, 44, 200, ok).
 /*Wed Nov 01 22:08:56 2023*/ request(15, 1698898136.165, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
 completed(15, 0.0, 44, 200, ok).
+server(started, 1698945421).
+/*Thu Nov 02 11:17:01 2023*/ request(1, 1698945421.299, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(55)]).
+completed(1, 0.046875, 108, 500, error("source_sink `\"./src/data/js_scripts/testConsoleLog.mjs\"' does not exist")).
+/*Thu Nov 02 11:17:12 2023*/ request(2, 1698945432.361, [peer(ip(127,0,0,1)),method(post),request_uri('/eval'),path('/eval'),http_version(1-1),host(localhost),port(8000),connection('keep-alive'),content_type('application/json'),sec_fetch_mode(cors),user_agent(undici),content_length(47)]).
+completed(2, 0.0, 44, 200, ok).
+server(stopped, 1698945452).
