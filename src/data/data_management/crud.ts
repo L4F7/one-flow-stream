@@ -172,10 +172,12 @@ export async function readAbout() {
 // This function is used to get the keywords
 export async function getKeywords() {
     try {
-        const filePath = resolve(`./src/data/keywords.json`);
-        const file = await readFile(filePath, 'utf-8');
+        await connect();
+        const file = await File.findOne({ filename: 'keywords.json' });
+        const content = file.data;
+
         return NextResponse.json(
-            { message: 'Keywords file loaded successfully.', keywords: file },
+            { message: 'Keywords file loaded successfully.', keywords: content },
             { status: 200 }
         );
     } catch (error) {
