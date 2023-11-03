@@ -33,3 +33,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+httpd.log
+src/data/ra_script/ra_output.txt

@@ -13,12 +13,10 @@ import { NextResponse } from 'next/server';
 import { resolve, dirname } from 'path';
 import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
+import { promisify } from 'util';
 import File from '@/models/file';
 import connect from '@/utils/db';
-import { promisify } from 'util';
-import { get } from 'http';
 import dns from 'node:dns';
-import { StringExpressionOperator } from 'mongoose';
 
 // This function is used to open the file
 export async function openFile(filename: string) {
@@ -46,7 +44,7 @@ export async function saveFile(request: Request, pFilename: string) {
 
         // If the file already exists, it will be updated
         if (existingFile) {
-            existingFile.fileData = fileContent;
+            existingFile.data = fileContent;
             await existingFile.save();
             return new NextResponse('File updated successfully', {
                 status: 200,
@@ -56,7 +54,7 @@ export async function saveFile(request: Request, pFilename: string) {
         // If the file does not exist, it will be created
         const file = new File({
             filename: pFilename,
-            fileData: fileContent,
+            data: fileContent,
         });
 
         await file.save();
@@ -154,10 +152,12 @@ export async function openEvaluatedFile(request: Request) {
 // This function is used to read the about file
 export async function readAbout() {
     try {
-        const filePath = resolve(`./src/data/about.json`);
-        const file = await readFile(filePath, 'utf-8');
+        await connect();
+        const file = await File.findOne({ filename: 'about.json' });
+        const content = file.data;
+
         const jsonFile = JSON.stringify({
-            about: file,
+            about: content,
             message: 'About file loaded successfully.',
         });
         return new Response(jsonFile, {

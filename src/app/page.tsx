@@ -246,7 +246,7 @@ export default function Home() {
                 return response.json();
             })
             .then((data) => {
-                const fileData = Buffer.from(data.fileData).toString('utf8');
+                const fileData = data.data;
                 dispatch({ type: 'SET_CONTENT', value: fileData });
                 dispatch({
                     type: 'SET_TYPED_FILENAME',
@@ -271,7 +271,7 @@ export default function Home() {
                 throw new Error('Please type a name for the script.');
 
             const requestBody = JSON.stringify({
-                fileContent: Buffer.from(content, 'utf8'),
+                fileContent: content,
             });
 
             await fetch(`/api/script/save/${typedFilename}`, {
