@@ -30,6 +30,32 @@ stages:
       vmImage: $(vmImageName)
 
     steps:
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '18.14.2'
+    
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+    
+    - task: Npm@1
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        customCommand: 'run build'
+    
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo WHERE AM I
+          pwd
+          echo WHAT'S IN HERE
+          ls
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
@@ -59,9 +85,10 @@ stages:
           - task: AzureRmWebAppDeployment@4
             displayName: 'Azure App Service Deploy: oneflowstream'
             inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              WebAppName: $(webAppName)
+              ConnectionType: 'AzureRM'
+              azureSubscription: '$(azureSubscription)'
+              appType: 'webAppLinux'
+              WebAppName: '$(webAppName)'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|18-lts'
               StartupCommand: 'npm run start'
@@ -69,5 +96,3 @@ stages:
               InlineScript: |
                 node --version
                 npm --version
-                npm install
-                npm run build --if-present
