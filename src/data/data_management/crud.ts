@@ -14,7 +14,7 @@ import { resolve, dirname } from 'path';
 import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
-import File from '@/models/file';
+import File from '@/models/File';
 import connect from '@/utils/db';
 import dns from 'node:dns';
 
@@ -92,7 +92,7 @@ export async function listFiles() {
 // This function is used to compile the file
 export async function compileFile(filepath : string) {
     try {
-        
+
         const compiledFile = await readFile(filepath, 'utf8');
         return NextResponse.json(
             { message: 'File compiled successfully.', result: compiledFile },
