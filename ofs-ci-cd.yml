@@ -52,7 +52,7 @@ stages:
         script: |
           echo WHERE AM I
           pwd
-          echo WHAT'S IN HERE
+          echo WHATS IN HERE
           ls
         workingDirectory: '$(System.DefaultWorkingDirectory)'
     
