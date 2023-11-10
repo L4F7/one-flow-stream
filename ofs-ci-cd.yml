@@ -28,45 +28,29 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
-    
-    variables:
-      NODE_ENV: 'production'
 
     steps:
     - task: NodeTool@0
+      displayName: 'Use Node 18.4.2'
       inputs:
         versionSource: 'spec'
         versionSpec: '18.14.2'
     
     - task: Npm@1
+      displayName: 'Install Dependencies'
       inputs:
         command: 'install'
         workingDir: '$(System.DefaultWorkingDirectory)'
     
     - task: Npm@1
-      inputs:
-        command: 'custom'
-        workingDir: '$(System.DefaultWorkingDirectory)'
-        customCommand: 'install require-hook'
-    
-    - task: Npm@1
+      displayName: 'Build Application'
       inputs:
         command: 'custom'
         workingDir: '$(System.DefaultWorkingDirectory)'
         customCommand: 'run build'
     
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo WHERE AM I
-          pwd
-          echo WHATS IN HERE
-          ls
-        workingDirectory: '$(System.DefaultWorkingDirectory)'
-    
     - task: ArchiveFiles@2
-      displayName: 'Archive files'
+      displayName: 'Archive Files'
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
