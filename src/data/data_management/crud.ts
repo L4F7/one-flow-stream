@@ -11,7 +11,7 @@
 import { readFile, readdir, writeFile } from 'fs/promises';
 import { createHash } from 'crypto';
 import { resolve } from 'path';
-import File from '@/models/file';
+import File from '@/models/File';
 import connect from '@/utils/db';
 import { NextResponse } from 'next/server';
 
