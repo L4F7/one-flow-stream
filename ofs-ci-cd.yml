@@ -28,6 +28,9 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
+    
+    variables:
+      NODE_ENV: 'production'
 
     steps:
     - task: NodeTool@0
