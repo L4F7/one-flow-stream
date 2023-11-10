@@ -1,0 +1,101 @@
+# Node.js React Web App to Linux on Azure
+# Build a Node.js React app and deploy it to Azure as a Linux web app.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- cicd-trblsht
+
+variables:
+
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: '379bb9d0-9f8a-46b9-b2fa-9b9376b912d3'
+
+  # Web app name
+  webAppName: 'oneflowstream'
+
+  # Environment name
+  environmentName: 'oneflowstream'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    
+    variables:
+      NODE_ENV: 'production'
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '18.14.2'
+    
+    - task: Npm@1
+      inputs:
+        command: 'ci'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+    
+    - task: Npm@1
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        customCommand: 'run build'
+    
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo WHERE AM I
+          pwd
+          echo WHATS IN HERE
+          ls
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(environmentName)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Azure App Service Deploy: oneflowstream'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: '$(azureSubscription)'
+              appType: 'webAppLinux'
+              WebAppName: '$(webAppName)'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|18-lts'
+              StartupCommand: 'npm run start'
+              ScriptType: 'Inline Script'
+              InlineScript: |
+                node --version
+                npm --version
