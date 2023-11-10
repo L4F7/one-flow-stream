@@ -46,6 +46,7 @@ stages:
     - task: Npm@1
       inputs:
         command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)'
         customCommand: 'install require-hook'
     
     - task: Npm@1
