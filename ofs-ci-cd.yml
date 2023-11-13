@@ -84,7 +84,7 @@ stages:
               WebAppName: '$(webAppName)'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|18-lts'
-              StartupCommand: 'npm run start'
+              StartupCommand: 'npm run azstart'
               ScriptType: 'Inline Script'
               InlineScript: |
                 node --version
