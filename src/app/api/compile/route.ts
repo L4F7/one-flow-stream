@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import { compileFile , fetchPrologServer } from '../../../data/data_management/crud';
+import { compileFile, fetchPrologServer, createFile } from '../../../data/data_management/crud';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -22,10 +22,22 @@ export async function POST(request: Request) {
         );
     }
 
-    const filepath = `./src/data/js_scripts/${requestData.filename}`;
+    const filename = requestData.filename;
+    const code = requestData.code;
     
-    return fetchPrologServer(filepath).then(  (res)  => {
+    return fetchPrologServer(filename, code).then(res => {
             console.log(`Prolog call successfull: ${JSON.stringify(res)}`);
+
+            const jsonRes = JSON.stringify(res);
+            const prologResponse = JSON.parse(jsonRes);
+            const resFilename = prologResponse.filename;
+            const resCode = prologResponse.code;
+            const filepath = createFile(resFilename, resCode);
+
+            // If the file was not created, throw an error
+            if(!filepath)
+                throw new Error('Error creating file');
+            
             const response = compileFile(filepath);
             return response;
         }

@@ -46,10 +46,11 @@ set_setting(http:logfile, 'service_log_file.log').
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% LOGIC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calls evaluation.
-evaluate(_{fileName:Filename}, _{status: true, answer:Code, msg:'succeed'}) :-
-    read_js_file_content(Filename, JsContent), 
-    write_file(Filename, JsContent),
-    Code is 0 % true
+evaluate(_{filename: Filename, code: Code}, _{status: true, filename: Filename, code:JSCode, msg:'succeed'}) :-
+    JSCode = "console.log('Hello World');"
+    % read_js_file_content(Filename, JsContent), 
+    % write_file(Filename, JsContent),
+    % Code is 0 % true
 .
 evaluate(_, _{accepted: false, answer:0, msg:'Error: failed evaluation'}).
 
