@@ -17,6 +17,7 @@ import { promisify } from 'util';
 import File from '@/models/File';
 import connect from '@/utils/db';
 import dns from 'node:dns';
+import { writeFileSync } from 'fs';
 
 // This function is used to open the file
 export async function openFile(filename: string) {
@@ -189,7 +190,7 @@ export async function getKeywords() {
 }
 
 // Fetch prolog server
-export const fetchPrologServer = (filePath: string) => {
+export const fetchPrologServer = (filename: string, code: string) => {
 
     return new Promise((resolve, reject) => {
         dns.setDefaultResultOrder('ipv4first');
@@ -199,7 +200,7 @@ export const fetchPrologServer = (filePath: string) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ fileName : filePath}),
+            body: JSON.stringify({ filename : filename, code : code}),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -217,6 +218,16 @@ export const fetchPrologServer = (filePath: string) => {
         });
 };
 
+export function createFile(filename: string, code: string) {
+    try {
+        const filePath = resolve(`./src/data/js_scripts/${filename}`);
+        writeFileSync(filePath, code, 'utf-8');
+        return filePath;
+    } catch (error) {
+        return false;
+    }
+}
+
 // This object is used to export all the functions
 const crud = {
     openFile,
@@ -227,6 +238,7 @@ const crud = {
     readAbout,
     getKeywords,
     fetchPrologServer,
+    createFile,
 };
 
 export default crud;

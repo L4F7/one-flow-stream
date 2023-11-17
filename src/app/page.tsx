@@ -168,7 +168,6 @@ export default function Home() {
         const data = {
             code: content,
             filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '',
-            filepath: typedFilename,
         };
 
         fetch(`api/compile`, {
