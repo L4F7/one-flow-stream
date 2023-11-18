@@ -195,7 +195,7 @@ export const fetchPrologServer = (filename: string, code: string) => {
     return new Promise((resolve, reject) => {
         dns.setDefaultResultOrder('ipv4first');
 
-        fetch('http://localhost:8000/eval', {
+        fetch('http://20.163.183.153:8000/eval', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
