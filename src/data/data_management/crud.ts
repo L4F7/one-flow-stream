@@ -127,9 +127,12 @@ export async function openEvaluatedFile(request: Request) {
             cwd: __dirname,
         })
             .then((result) => {
+                console.log("SI");
+                console.log(result.stdout);
                 output = result.stdout;
             })
             .catch((error) => {
+                console.log("FAILING");
                 output = error;
             });
 
