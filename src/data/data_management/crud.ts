@@ -108,7 +108,9 @@ export async function compileFile(filepath : string) {
 export async function openEvaluatedFile(request: Request) {
     const execPromisified = promisify(exec); // Promisify the exec function
     const __filename = fileURLToPath(import.meta.url); // Get the current file path
-    const __dirname = dirname(__filename); // Get the current directory path
+    let __dirname = dirname(__filename); // Get the current directory path
+
+    if (__dirname.startsWith("/home/vsts")) __dirname = "/home/site/wwwroot/src/data/data_management";
 
     console.log("DIRNAME: ", __dirname);
 
