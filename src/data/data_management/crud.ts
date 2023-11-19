@@ -137,14 +137,14 @@ export async function openEvaluatedFile(request: Request) {
             .then((result) => {
                 console.log("SI");
                 console.log("RESULT.STDOUT", result.stdout);
-                //output = result.stdout;
-                output = "HOLA DESDE EL THEN";
+                output = result.stdout;
+                //output = "HOLA DESDE EL THEN";
             })
             .catch((error) => {
                 console.log("FAILING");
                 console.log("ERROR: ", error);
-                //output = error;
-                output = "HOLA DESDE EL CATCH";
+                output = error;
+                //output = "HOLA DESDE EL CATCH";
             });
 
         const filePathSave = resolve(`./src/data/ra_script/ra_output.txt`);
