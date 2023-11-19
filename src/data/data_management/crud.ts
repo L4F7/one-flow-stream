@@ -110,6 +110,8 @@ export async function openEvaluatedFile(request: Request) {
     const __filename = fileURLToPath(import.meta.url); // Get the current file path
     const __dirname = dirname(__filename); // Get the current directory path
 
+    console.log("DIRNAME: ", __dirname);
+
     try {
         const content = await request.json();
 
@@ -119,7 +121,11 @@ export async function openEvaluatedFile(request: Request) {
                 { status: 500 }
             );
 
+        console.log("CONTENT: ", content);
+
         const filePathLoad = `../../data/js_scripts/${content.filename}`;
+
+        console.log("FILEPATH: ", filePathLoad);
 
         let output: String = '';
 
@@ -128,12 +134,13 @@ export async function openEvaluatedFile(request: Request) {
         })
             .then((result) => {
                 console.log("SI");
-                console.log(result.stdout);
+                console.log("RESULT.STDOUT", result.stdout);
                 //output = result.stdout;
                 output = "HOLA DESDE EL THEN";
             })
             .catch((error) => {
                 console.log("FAILING");
+                console.log("ERROR: ", error);
                 //output = error;
                 output = "HOLA DESDE EL CATCH";
             });
