@@ -179,13 +179,13 @@ parse(OFSCode, JSCode) :-
   %writeln('\n*** Purified AST ***'),
   %format('~n ~q ~n', [AstPurified]),
   %writeln('\n*** Generating JS ***\n'),
-  atomic_list_concat(["tempTranspiled", mjs], '.', JSFilename),
+  atomic_list_concat(["prolog/tempTranspiled", mjs], '.', JSFilename),
   generator(JSFilename, AstPurified, JSCode)
   %writeln('*** Done ***\n'),
   %writeln(JSCode),
 .
 
-parse(OFSCode, JSCode) :- 
+parse(_OFSCode, _JSCode) :- 
     fail
     %format('~n*** ~s was NOT correctly parsed! Buaahh ***~n', [OFSCode])
 .

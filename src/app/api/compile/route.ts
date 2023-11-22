@@ -32,7 +32,7 @@ export async function POST(request: Request) {
             const prologResponse = JSON.parse(jsonRes);
             //const resFilename = prologResponse.filename;
             const resCode = prologResponse.code;
-            const filepath = createFile("transpiledFile", resCode);
+            const filepath = createFile(filename, resCode);
 
             // If the file was not created, throw an error
             if(!filepath)
