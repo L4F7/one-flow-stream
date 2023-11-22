@@ -203,18 +203,19 @@ export async function getKeywords() {
     }
 }
 
-// Fetch prolog server
-export const fetchPrologServer = (filename: string, code: string) => {
+// Fetch prolog server Compile function
+export const fetchPrologServerCompile = (code: string) => {
 
     return new Promise((resolve, reject) => {
         dns.setDefaultResultOrder('ipv4first');
-
-        fetch('http://20.163.183.153:8000/eval', {
+        //Agregar codigo para validar SO y poner URL correcta
+        //fetch('http://20.163.183.153:8000/compile', {
+        fetch('http://localhost:8000/compile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ filename : filename, code : code}),
+            body: JSON.stringify({code : code}),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -251,7 +252,7 @@ const crud = {
     openEvaluatedFile,
     readAbout,
     getKeywords,
-    fetchPrologServer,
+    fetchPrologServerCompile,
     createFile,
 };
 
