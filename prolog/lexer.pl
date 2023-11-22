@@ -36,6 +36,8 @@ Date: 23/11/2023
                 filterOptr/2,
                 mapOptr/2,
                 cutOptr/2,
+                toLstOptr/2,
+                forEachOptr/2,
                 ws/2,
                 wss/2,
                 sign/3,
@@ -78,6 +80,8 @@ iterateOptr --> wss, "[*", wss.
 filterOptr --> wss, "[?", wss.
 mapOptr --> wss, "[>", wss.
 cutOptr --> wss, "[!", wss.
+toLstOptr --> wss, "[...]", wss.
+forEachOptr --> wss, "[/", wss.
 
 % Whitespace characters.
 ws --> " " ; "\n" ; "\r" ; "\t".

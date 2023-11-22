@@ -1,5 +1,5 @@
 @echo off
-start cmd /k "swipl simple_service_server.pl"
+start cmd /k "swipl prolog/server.pl"
 start cmd /k "npm install && npm run build && npm start"
 
 :: Add a delay to allow time for the server to start

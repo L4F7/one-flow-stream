@@ -33,6 +33,12 @@ class Stream {
         return new Stream(newIterable);
     }
 
+    forEach(f){
+        for (const e of this.#iterable) {
+            f(e);
+        }
+    }
+
     toList() {
         return [...this.#iterable];
     }

@@ -36,7 +36,7 @@ Pasos para la ejecución la aplicación:
 
 6. Dentro de la carpeta del proyecto abrimos una consola e ingresamos el siguiente <br />
    comando para iniciar el servidor de Prolog:  <br />
-	 - swipl simple_service_server.pl
+	 - swipl prolog/server.pl
     
 8. Abrir el navegador web y acceder a: http://localhost:3000/
 

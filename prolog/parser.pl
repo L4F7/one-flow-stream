@@ -71,6 +71,8 @@ ofs_expression( ofs_expr(E) ) --> iterate_expression(E).
 ofs_expression( ofs_expr(E) ) --> map_expression(E).
 ofs_expression( ofs_expr(E) ) --> filter_expression(E).
 ofs_expression( ofs_expr(E) ) --> cut_expression(E).
+ofs_expression( ofs_expr(E) ) --> toLst_expression(E).
+ofs_expression( ofs_expr(E) ) --> forEach_expression(E).
 ofs_expression( ofs_expr(E) ) --> es6_expression(E).
 
 
@@ -78,7 +80,8 @@ iterate_expression( iter_expr(E1, E2) ) --> iterateOptr, expression(E1), comma ,
 map_expression( map_expr(E) ) --> mapOptr, expression(E), close_sqr_bracket.
 filter_expression( filter_expr(E) ) --> filterOptr, expression(E), close_sqr_bracket.
 cut_expression( cut_expr(E) ) --> cutOptr, expression(E), close_sqr_bracket.
-
+toLst_expression( toLst_expr(undefined) ) --> toLstOptr.
+forEach_expression( forEach_expr(E) ) --> forEachOptr, expression(E), close_sqr_bracket.
 
 es6_expression( es6_expr(E) ) --> boolean_expression(E).
 es6_expression( es6_expr(E) ) --> lambda_expression(E).

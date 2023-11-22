@@ -131,6 +131,18 @@ generate(Stream, cut_expr(E)) :-
    format(Stream, ' )', [])
 .
 
+% toLst_expression generator
+generate(Stream, toLst_expr(undefined)) :-
+   format(Stream, 'toList()', [])
+.
+
+% forEach_expression generator
+generate(Stream, forEach_expr(E)) :-
+   format(Stream, 'forEach( ', []),
+   generate(Stream, E),
+   format(Stream, ' )', [])
+.
+
 % es6_expression generator
 generate(Stream, es6_expr(E)) :-
    generate(Stream, E)
