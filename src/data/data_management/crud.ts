@@ -205,12 +205,20 @@ export async function getKeywords() {
 
 // Fetch prolog server Compile function
 export const fetchPrologServerCompile = (code: string) => {
+    const os = require('os');
+
+    const platform = os.platform();
+    let prologServer = 'http://localhost:8000/compile';
+
+    if (platform === 'linux') {
+        console.log('Running on Linux');
+        prologServer = 'http://20.163.183.153:8000/compile';
+    } 
+
 
     return new Promise((resolve, reject) => {
         dns.setDefaultResultOrder('ipv4first');
-        //Agregar codigo para validar SO y poner URL correcta
-        //fetch('http://20.163.183.153:8000/compile', {
-        fetch('http://localhost:8000/compile', {
+        fetch(prologServer, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
