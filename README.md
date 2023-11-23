@@ -16,7 +16,24 @@ Desarrolladores: <br />
     - Maria Angelica Robles Azofeifa <br />
     - Royer Zuñiga Villareal <br />
 
-Pasos para la ejecución la aplicación:
+
+Pasos para la instalación y ejecución la aplicación de manera totalmente automatizada:
+
+1. Abrir el folder principal del proyecto.  <br />
+
+2. Ejecutar el archivo BAT: Run-Install-Build-Start.bat.  <br />
+
+3. La automatizacion se encargará de instalar las dependencias y crear el "Build" del proyecto; además de inicializar el servidor de Prolog de manera automática.  <br />
+
+4. Cuando la instalación y build finalizan, el archivo BAT se encargará de ejecutar el proyecto.  <br />
+
+5. Abrir el navegador web y acceder a: http://localhost:3000/  <br />
+
+NOTA: 
+ - En caso de presentarse algun problema en la ejecución del archivo BAT, se incluyen a continuación los pasos para realizar la instalación, build y ejecución de App y Servidor de manera manual.
+ - Hacer caso omiso a las instrucciones abajo en caso de que el archivo BAT se haya ejecutado correctamente.
+
+Pasos para la ejecución la aplicación de manera manual en caso de que alguno de las automatizaciones muestre un resultado fallido:
 
 1. Clonar la rama principal ("Master") y descargar el código por medio del comando:  <br />
 
@@ -39,8 +56,3 @@ Pasos para la ejecución la aplicación:
 	 - swipl prolog/server.pl
     
 8. Abrir el navegador web y acceder a: http://localhost:3000/
-
-De manera opcional para la ejecución de la aplicación, esta cuenta con un archivo .bat el cual se encarga  <br />
-de ejecutar npm install, npm build, npm start e inicializar el servidor de prolog de manera automática. Para  <br />
-la ejecución del mismo solo es necesario navegar a la carpeta donde se descargó el proyecto y ejecutar el <br />
-archivo Run-Install-Build-Start.bat.
