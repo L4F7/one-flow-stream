@@ -423,7 +423,7 @@ generate_last(Stream, imports_list(id(I))) :-
 test :-
    open("test.js", write, Stream),
 
-   generate(Stream, expr(pipe_expr(ofs_expr(es6_expr(bool_expr(rel_expr(arith_expr(factor_expr(simple_expr(qual_id(access_expr(id(a)),[]))),[]),[]),[]))),[])) ),
+   generate(Stream, id(a)),
    
    close(Stream)
 .
