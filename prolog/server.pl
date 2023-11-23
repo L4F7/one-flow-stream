@@ -71,5 +71,7 @@ home(_Request) :-
     atom_number(SPort, Port),
     format('*** Serving on port ~d *** ~n', [Port]),
     set_setting_default(http:cors, [*]), % Allows cors for every
-    server(Port).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    server(Port)
+.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END OF FILE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

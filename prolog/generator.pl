@@ -14,7 +14,8 @@ Date: 23/11/2023
 
 :- module(generator, [generator/3]).
 
-%%%%%%%%%%%%%%%%%%%%%%%% GENERATOR %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GENERATOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 generator(JSFilename,  prog(StatementList) , Output) :-
    open(JSFilename, write, Stream),
 
@@ -39,15 +40,15 @@ generator(JSFilename,  prog(StatementList) , Output) :-
    close(Stream2)
 .
 
-generate(Stream, single_comment(S)) :-  % single_comment( Hola a todos )
+generate(Stream, single_comment(S)) :-
    format(Stream, '// ~s', [S])
 .
 
-generate(Stream, multiple_comment(S)) :-  % single_comment( Hola a todos )
+generate(Stream, multiple_comment(S)) :-
    format(Stream, '/* ~s */', [S])
 .
 
-generate(Stream, imports_mod(id(I), str(S)) ) :-  % importModule(id("x"), str("module")))
+generate(Stream, imports_mod(id(I), str(S)) ) :-
    format(Stream, 'import ~s from ~s~s~s;~n', [I, "'",S, "'"])
 .
 
@@ -85,7 +86,7 @@ generate(Stream, pipe_expr(E, Tail)) :-
       generate(Stream, E),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI)))
-      ; generate(Stream, E) % If the length is 0, do nothing
+      ; generate(Stream, E)
    ,
       true
 .
@@ -156,7 +157,7 @@ generate(Stream, bool_expr(RE, Tail)) :-
       generate(Stream, RE),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI)))
-      ; generate(Stream, RE) % If the length is 0, do nothing
+      ; generate(Stream, RE)
    ,
       true
 .
@@ -191,7 +192,7 @@ generate(Stream, rel_expr(AE, Tail)) :-
       generate(Stream, AE),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI), format(Stream, ' ', [])))
-      ; generate(Stream, AE) % If the length is 0, do nothing
+      ; generate(Stream, AE)
    ,
       true
 .
@@ -210,7 +211,7 @@ generate(Stream, arith_expr(FE, Tail)) :-
       generate(Stream, FE),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI), format(Stream, ' ', [])))
-      ; generate(Stream, FE) % If the length is 0, do nothing
+      ; generate(Stream, FE)
    ,
       true
 .
@@ -272,7 +273,7 @@ generate(Stream, qual_id(QI, Tail)) :-
       generate(Stream, QI),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI)))
-      ; generate(Stream, QI) % If the length is 0, do nothing
+      ; generate(Stream, QI)
    ,
       true
 .
@@ -309,7 +310,7 @@ generate(Stream, args_expr(E, Tail)) :-
       format(Stream, ', ', []),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI), format(Stream, ', ', [])))
-      ; generate(Stream, E) % If the length is 0, do nothing
+      ; generate(Stream, E)
    ,
       true 
 .
@@ -328,11 +329,10 @@ generate(Stream, array_expr(E, Tail)) :-
       format(Stream, ' + ', []),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI), format(Stream, ' + ', [])))
-      ; generate(Stream, E) % If the length is 0, do nothing
+      ; generate(Stream, E)
    ,
       true
 .
-
 
 % array_expression_contents generator
 generate(Stream, array_expr_contents(E, Tail)) :-
@@ -344,7 +344,7 @@ generate(Stream, array_expr_contents(E, Tail)) :-
       format(Stream, ', ', []),
       forall(member(CLI, Tail),
          (CLI == Last -> generate(Stream, CLI), format(Stream, ' ]', []) ; generate(Stream, CLI), format(Stream, ', ', [])))
-      ; generate(Stream, E) % If the length is 0, do nothing
+      ; generate(Stream, E)
    ,
       format(Stream, ' ]', [])
 .
@@ -365,7 +365,6 @@ generate(Stream, array_expr_tail(E)) :-
    generate(Stream, E)
 .
 
-
 % params_expression generator
 generate(Stream, params_expr(id(I))) :-
    format(Stream, '~s', [I])
@@ -381,7 +380,7 @@ generate(Stream, params_expr(I, Tail)) :-
       format(Stream, ', ', []),
       forall(member(CLI, Tail),
       (CLI == Last -> generate(Stream, CLI) ; generate(Stream, CLI), format(Stream, ', ', [])))
-      ; generate(Stream, I) % If the length is 0, do nothing
+      ; generate(Stream, I)
    ),
      format(Stream, ' )', [])
 .
@@ -391,39 +390,40 @@ generate(Stream, params_expr_tail(id(I))) :-
    format(Stream, '~s', [I])
 . 
 
-generate(Stream, id(I)) :-  % id("x")
+% id generator
+generate(Stream, id(I)) :-
    format(Stream, '~s', [I])
 .
 
-generate(Stream, num(N)) :-  % num("1")
+% number generator
+generate(Stream, num(N)) :-
    atom_number(N, S),
    format(Stream, '~q', [S])
 .
 
-generate(Stream, str(S)) :-  % str("x")
+% string generator
+generate(Stream, str(S)) :-
    format(Stream, '~s~s~s', ["`",S,"`"])
 .
 
-generate(Stream, bool(B)) :-  % bool("true")
+% boolean generator
+generate(Stream, bool(B)) :-
    format(Stream, '~s', [B])
 . 
  
+% undefined generator
 generate( Stream, S) :-
-format(Stream, '/* >>>> ~q NOT GENERATED <<<< */~n', [S])
+   format(Stream, '/* >>>> ~q NOT GENERATED <<<< */~n', [S])
 . 
 
+% comment generator
 generate_comment(Stream, Comment) :-
    format(Stream, '// ~s~n', [Comment])
 .
 
+% last element of a list
 generate_last(Stream, imports_list(id(I))) :-
    format(Stream, '~s', [I])
 .
 
-test :-
-   open("test.js", write, Stream),
-
-   generate(Stream, id(a)),
-   
-   close(Stream)
-.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END OF FILE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -14,8 +14,7 @@ Date: 23/11/2023
 
 :- module(lexer, 
             [
-                let/3,
-                const/3,
+                declarator/3,
                 import/2,
                 from/2,
                 semicolon/2,
@@ -52,10 +51,12 @@ Date: 23/11/2023
                 import_symbols/3
             ]).
 
-%%%%%%%%%%%%%%%%%%%%%% TOKENIZER = LEXER %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LEXER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Let and const.
 let("let") --> wss, "let", ws, wss.
 const("const") --> wss, "const", ws, wss.
+declarator(T) --> let(T); const(T).
 
 % Misc.
 import --> wss, "import", wss.
@@ -90,20 +91,14 @@ ws --> " " ; "\n" ; "\r" ; "\t".
 wss --> [].
 wss --> ws, wss.
 
-
 % Sign of an element.
 sign(S) --> "+", {char_code('+', S)}.
 sign(S) --> "-", {char_code('-', S)}.
-
 
 % An identifier is a letter followed by any number of letters or digits.
 idntr( id(T) ) --> wss, idntr_char(I), idntr_tail(IT), wss, {string_codes(T, [I|IT])}.
 idntr_tail(IT) --> idntr_char_tail(I), idntr_tail(AIT), {append([I], AIT, IT)}, !.
 idntr_tail([]) --> [].
-
-% A signed identifier is a sign followed by an identifier.
-sgn_idntr( id(T)) --> wss, sign(S), idntr_char(I), idntr_tail(IT), wss, {blt_sgn_idntr([S|[I|IT]], T)}.
-blt_sgn_idntr(L, T) :-  del_empty_frm_lst(L, NL), string_codes(T, NL).
 
 % Identifier characters.
 idntr_char(C) --> letter(C).
@@ -113,11 +108,9 @@ idntr_char(C) --> [C], {char_code(CH, C), CH = '$'}.
 idntr_char_tail(C) --> idntr_char(C).
 idntr_char_tail(C) --> digit(C).
 
-
 % Number. A number is a digit followed by any number of digits or a point followed by any number of digits.
 num(num(T)) --> wss, digit(D), num_tail(NT), wss, {string_codes(T, [D | NT])}.
 num(num(T)) --> wss, sign(S), digit(D), num_tail(NT), wss, {string_codes(T, [S | [D | NT]])}.
-
 
 num_tail([D | ANT]) --> digit(D), num_tail(ANT).
 num_tail([P | ANT]) --> ".", ptn_num_tail(ANT), {char_to_code(".", P)}.
@@ -147,13 +140,11 @@ sqr_bracket_content( [E | AE] ) --> list_elmnt(E), after_element(AE).
 after_element([]) --> [].
 after_element( E ) --> ",", sqr_bracket_content( E ).
 
-
 % Digit is any digit and letter is any letter.
 digit(D) --> [D], {code_type(D, digit)}.
 letter(L) --> [L], {code_type(L, alpha)}.
 
 char_to_code(I, O) :- string_codes(I, [O]).
-
 
 % Relational operators.
 rel_optr("<") --> wss, "<", wss, {string_codes("<", _S)}.
@@ -162,7 +153,6 @@ rel_optr("==") --> wss, "==", wss, {string_codes("==", _S)}.
 rel_optr("!=") --> wss, "!=", wss, {string_codes("!=", _S)}.
 rel_optr("<=") --> wss, "<=", wss, {string_codes("<=", _S)}.
 rel_optr(">=") --> wss, ">=", wss, {string_codes(">=", _S)}.
-
 
 % Boolean operators.
 bool_and("&&") --> wss, "&&", wss, {string_codes("&&", _O)}.
@@ -173,14 +163,12 @@ bool_optr(B) --> bool_and(B); bool_or(B).
 unary_optr("!") --> wss, "!", wss, {string_codes("!", _S)}.
 unary_optr("-") --> wss, "-", wss, {string_codes("-", _S)}.
 
-
 % Arithmetic operators.
 arith_optr("+") --> wss, "+", wss, {string_codes("+", _S)}.
 arith_optr("-") --> wss, "-", wss, {string_codes("-", _S)}.
 arith_optr("*") --> wss, "*", wss, {string_codes("*", _S)}.
 arith_optr("/") --> wss, "/", wss, {string_codes("/", _S)}.
 arith_optr("%") --> wss, "%", wss, {string_codes("%", _S)}.
-
 
 % Import symbols
 import_symbols( [I | IST] ) --> wss, "{", idntr(I), import_symbols_tail(IST), "}", wss.
@@ -190,7 +178,4 @@ import_symbols_tail( [I | IST] ) --> ",", idntr(I), import_symbols_tail( IST ).
 import_symbols_tail( [] ) --> [].
 
 
-% Delete empty list from list
-del_empty_frm_lst([], []).
-del_empty_frm_lst([[] | T], NT) :- del_empty_frm_lst(T, NT).
-del_empty_frm_lst([H | T], [H | NT]) :- H \= [], del_empty_frm_lst(T, NT).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% END OF FILE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
