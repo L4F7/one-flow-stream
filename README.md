@@ -32,6 +32,7 @@ Pasos para la instalación y ejecución la aplicación de manera totalmente auto
 NOTA: 
  - En caso de presentarse algun problema en la ejecución del archivo BAT, se incluyen a continuación los pasos para realizar la instalación, build y ejecución de App y Servidor de manera manual.
  - Hacer caso omiso a las instrucciones abajo en caso de que el archivo BAT se haya ejecutado correctamente.
+ - Puede encontrar una version de la aplicacion completamente funcional alojada y ejecutándose en un servidor Azure: https://oneflowstream.azurewebsites.net/
 
 Pasos para la ejecución la aplicación de manera manual en caso de que alguno de las automatizaciones muestre un resultado fallido:
 
