@@ -5,7 +5,7 @@ Curso: Paradigmas de Programación  <br />
 Profesor: Carlos Loría Sáenz  <br />
 Ciclo II - 2023  <br />
 
-###Proyecto OneFlowStream (OFS)
+###Proyecto OneFlowStream (OFS) <br />
     Aplicacion enfocada en la transpilacion de codigo OSF a JS, utilizando como compilador un servidor de Prolog. <br />
     Una vez transpilado el código se puede evaluar la transpilación mostrando en pantalla el resultado de la misma.
 
