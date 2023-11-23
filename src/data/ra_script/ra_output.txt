@@ -1,7 +1,0 @@
-*** Test Case 0 ***
-ten= 9
-[ 1, [ 2, 3, [ 4 ] ], 'hola' ]
-3
-3
-true
-true
