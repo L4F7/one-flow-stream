@@ -165,6 +165,14 @@ export default function Home() {
 
     //API to call /Compile service from server using POST
     const handleSendToServer = () => {
+
+        if(typedFilename == ""){
+            dispatch({
+                type: 'SET_TYPED_FILENAME',
+                value: "Local_Temp.ofs",
+            });
+        }
+
         const data = {
             code: content,
             filename: typedFilename ? typedFilename.split('.')[0] + '.mjs' : '',
