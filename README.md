@@ -5,11 +5,11 @@ Curso: Paradigmas de Programación  <br />
 Profesor: Carlos Loría Sáenz  <br />
 Ciclo II - 2023  <br />
 
-Proyecto OneFlowStream (OFS)  <br />
+###Proyecto OneFlowStream (OFS)  <br />
     Aplicacion enfocada en la transpilacion de codigo OSF a JS, utilizando como compilador un servidor de Prolog. <br />
     Una vez transpilado el código se puede evaluar la transpilación mostrando en pantalla el resultado de la misma.
 
-Desarrolladores: <br />
+###Desarrolladores: <br />
     - Kenneth Alfaro Barboza <br />
     - Luis Fuentes Fuentes <br />
     - Luis Eduardo Restrepo Veintemilla <br />
@@ -17,7 +17,7 @@ Desarrolladores: <br />
     - Royer Zuñiga Villareal <br />
 
 
-Pasos para la instalación y ejecución la aplicación de manera totalmente automatizada:
+###Pasos para la instalación y ejecución la aplicación de manera totalmente automatizada:
 
 1. Abrir el folder principal del proyecto.  <br />
 
@@ -29,7 +29,7 @@ Pasos para la instalación y ejecución la aplicación de manera totalmente auto
 
 5. Abrir el navegador web y acceder a: http://localhost:3000/  <br />
 
-NOTA: 
+###NOTA: 
  - En caso de presentarse algun problema en la ejecución del archivo BAT, se incluyen a continuación los pasos para realizar la instalación, build y ejecución de App y Servidor de manera manual.
  - Hacer caso omiso a las instrucciones abajo en caso de que el archivo BAT se haya ejecutado correctamente.
  - Puede encontrar una version de la aplicacion completamente funcional alojada y ejecutándose en un servidor Azure: https://oneflowstream.azurewebsites.net/
