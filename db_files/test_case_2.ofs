@@ -1,0 +1,17 @@
+/*
+ test_case_2.ofs
+ let 
+ const
+ iterate
+ map
+ cut
+ call
+ arithmethic
+ lambda
+ nested lambda
+*/
+const FOUR = 9
+let ten = 2* FOUR + 1
+const printIt = it -> console.log(it) 
+const tenNats = [* 0, n -> n + 1] >> [! ten]
+tenNats >> [> printIt]
